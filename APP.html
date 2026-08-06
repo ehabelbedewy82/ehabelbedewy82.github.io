@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Twin & AI Sports | Prof. Dr. Ehab Elbedewy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ===== نفس الأنماط السابقة مع بعض التعديلات الطفيفة ===== */
+        :root {
+            --bg-primary: #0b1120;
+            --bg-secondary: #111d2e;
+            --bg-card: #172237;
+            --bg-card-hover: #1e3048;
+            --border-color: #2a3f5a;
+            --text-primary: #e8edf5;
+            --text-secondary: #94a9c9;
+            --text-muted: #5e7a9e;
+            --accent-gold: #f7c948;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #22d3ee;
+            --accent-pink: #f472b6;
+            --accent-green: #4ade80;
+            --accent-orange: #fb923c;
+            --accent-red: #f87171;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s ease;
+            --font: 'Segoe UI', system-ui, sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            direction: ltr;
+            overflow-x: hidden;
+        }
+        body.rtl {
+            direction: rtl;
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 10px; }
+
+        /* ===== سايدبار ===== */
+        .sidebar {
+            width: 280px;
+            min-height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.2rem 0.8rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            transition: var(--transition);
+            z-index: 100;
+        }
+        body.rtl .sidebar { border-right: none; border-left: 1px solid var(--border-color); }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.4rem 1rem 1.4rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .sidebar-brand i { font-size: 2rem; color: var(--accent-gold); }
+        .sidebar-brand h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .sidebar-brand small {
+            display: block;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            -webkit-text-fill-color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .sidebar-nav { list-style: none; padding: 0; }
+        .sidebar-nav li { margin-bottom: 0.2rem; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.65rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+        body.rtl .sidebar-nav a { border-left: none; border-right: 3px solid transparent; }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-left-color: var(--accent-gold);
+        }
+        body.rtl .sidebar-nav a:hover, body.rtl .sidebar-nav a.active {
+            border-left: none;
+            border-right-color: var(--accent-gold);
+        }
+        .sidebar-nav a i { width: 20px; text-align: center; font-size: 1rem; color: var(--accent-cyan); }
+        .sidebar-nav a .badge {
+            margin-left: auto;
+            background: var(--accent-gold);
+            color: #0b1120;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        body.rtl .sidebar-nav a .badge { margin-left: 0; margin-right: auto; }
+
+        /* ===== المحتوى الرئيسي ===== */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 2rem 3rem 2rem;
+            max-width: calc(100% - 280px);
+            transition: var(--transition);
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .topbar-left h1 { font-size: 1.5rem; font-weight: 600; }
+        .topbar-left h1 span { color: var(--accent-gold); }
+        .topbar-actions { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .lang-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .lang-toggle:hover { background: var(--bg-card-hover); border-color: var(--accent-gold); }
+        .lang-toggle i { color: var(--accent-gold); }
+        .datetime {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ===== وحدات ===== */
+        .module-section { display: none; animation: fadeUp 0.4s ease; }
+        .module-section.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.8rem;
+        }
+        .section-header h2 { font-size: 1.6rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+        .section-header h2 i { color: var(--accent-gold); }
+        .section-header .subtitle { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.4rem 1.4rem 1.6rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .card:hover { background: var(--bg-card-hover); border-color: var(--accent-gold); transform: translateY(-3px); }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.8rem;
+        }
+        .card-header i { font-size: 1.6rem; color: var(--accent-cyan); width: 32px; }
+        .card-header h3 { font-size: 1.05rem; font-weight: 600; }
+        .card-header .card-badge {
+            margin-left: auto;
+            background: var(--accent-gold);
+            color: #0b1120;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.7rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        body.rtl .card-header .card-badge { margin-left: 0; margin-right: auto; }
+        .card-body { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; }
+        .card-body .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .card-body .stat .label { color: var(--text-muted); }
+        .card-body .stat .value { color: var(--text-primary); font-weight: 600; }
+        .card-body .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        .card-body .progress-bar .fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            transition: width 0.6s ease;
+        }
+        .card-body .progress-bar .fill.gold { background: linear-gradient(90deg, var(--accent-gold), #f59e0b); }
+        .card-body .progress-bar .fill.pink { background: linear-gradient(90deg, var(--accent-pink), #ec4899); }
+        .card-body .progress-bar .fill.green { background: linear-gradient(90deg, var(--accent-green), #22c55e); }
+        .card-body .progress-bar .fill.orange { background: linear-gradient(90deg, var(--accent-orange), #f97316); }
+        .card-body .progress-bar .fill.red { background: linear-gradient(90deg, var(--accent-red), #ef4444); }
+
+        .tag {
+            display: inline-block;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            padding: 0.15rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 0.15rem 0.15rem;
+            border: 1px solid var(--border-color);
+        }
+        .tag.gold { color: var(--accent-gold); border-color: var(--accent-gold); }
+        .tag.cyan { color: var(--accent-cyan); border-color: var(--accent-cyan); }
+        .tag.pink { color: var(--accent-pink); border-color: var(--accent-pink); }
+        .tag.green { color: var(--accent-green); border-color: var(--accent-green); }
+
+        .btn-ai {
+            background: var(--accent-gold);
+            color: #0b1120;
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-ai:hover { transform: scale(1.04); box-shadow: 0 0 20px rgba(247, 201, 72, 0.3); }
+        .btn-ai-outline {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-ai-outline:hover { background: var(--accent-cyan); color: #0b1120; }
+
+        /* ===== النموذج الجديد ===== */
+        .form-group {
+            margin-bottom: 0.8rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.2rem;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #0b1120;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-primary:hover { transform: scale(1.03); box-shadow: 0 0 15px rgba(247, 201, 72, 0.3); }
+
+        /* ===== قائمة الرياضيين ===== */
+        .athlete-list {
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .athlete-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        .athlete-item .name { color: var(--text-primary); font-weight: 600; }
+        .athlete-item .info { color: var(--text-secondary); }
+
+        /* ===== تذييل ===== */
+        .platform-footer {
+            margin-top: 3rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .platform-footer .signature { display: flex; align-items: center; gap: 1rem; }
+        .platform-footer .signature i { font-size: 2rem; color: var(--accent-gold); }
+        .platform-footer .signature .text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+        .platform-footer .signature .text strong { color: var(--text-primary); display: block; font-size: 0.95rem; }
+        .platform-footer .signature .text .title { color: var(--accent-gold); font-weight: 500; }
+        .platform-footer .vision-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-gold);
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ===== شاشة البداية ===== */
+        .splash-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .splash-overlay.hidden { opacity: 0; pointer-events: none; transform: scale(1.02); }
+        .splash-overlay .logo { font-size: 4rem; color: var(--accent-gold); margin-bottom: 0.5rem; }
+        .splash-overlay h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .splash-overlay .sub { color: var(--text-secondary); font-size: 1rem; margin-top: 0.3rem; }
+        .splash-overlay .prof {
+            margin-top: 1.8rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+        .splash-overlay .prof strong { color: var(--text-primary); display: block; font-size: 1.1rem; }
+        .splash-overlay .prof .title { color: var(--accent-gold); }
+        .splash-overlay .loader {
+            margin-top: 2rem;
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* استجابة */
+        @media (max-width: 992px) {
+            .sidebar { width: 72px; padding: 0.8rem 0.4rem; }
+            .sidebar-brand h2, .sidebar-brand small, .sidebar-nav a span, .sidebar-nav a .badge { display: none; }
+            .sidebar-brand { justify-content: center; padding: 0.4rem 0 1rem 0; }
+            .sidebar-brand i { font-size: 2.2rem; }
+            .sidebar-nav a { justify-content: center; padding: 0.7rem 0; border-left: none !important; border-right: none !important; }
+            .sidebar-nav a i { font-size: 1.4rem; margin: 0; }
+            .main-content { max-width: 100%; padding: 1rem 1.2rem 2rem; }
+            body.rtl .sidebar-nav a { border-left: none !important; border-right: none !important; }
+        }
+        @media (max-width: 640px) {
+            .topbar-left h1 { font-size: 1.1rem; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .platform-footer { flex-direction: column; align-items: flex-start; }
+            .datetime { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- شاشة البداية -->
+<div class="splash-overlay" id="splash">
+    <div class="logo"><i class="fas fa-robot"></i></div>
+    <h1 id="splashTitle">Digital Twin &amp; AI Sports</h1>
+    <div class="sub" id="splashSub">Intelligent Sports Science Platform</div>
+    <div class="prof">
+        <strong>Prof. Dr. Ehab Elbedewy</strong>
+        <span class="title" id="splashProfTitle">Professor of Sports Sciences</span><br />
+        <span id="splashProfDesc">Artificial Intelligence &amp; Digital Twin Researcher &bull; Tanta University &bull; Egypt</span>
+    </div>
+    <div class="loader"></div>
+</div>
+
+<!-- سايدبار -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <i class="fas fa-robot"></i>
+        <h2>AI Sports<br /><small id="brandSub">Digital Twin Platform</small></h2>
+    </div>
+    <ul class="sidebar-nav" id="sidebarNav">
+        <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-th-large"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+        <li><a href="#" data-section="twins"><i class="fas fa-cubes"></i><span data-i18n="nav.twins">Digital Twins</span><span class="badge" data-i18n="nav.new">NEW</span></a></li>
+        <li><a href="#" data-section="scientist"><i class="fas fa-brain"></i><span data-i18n="nav.scientist">AI Sports Scientist</span></a></li>
+        <li><a href="#" data-section="coach"><i class="fas fa-chalkboard-teacher"></i><span data-i18n="nav.coach">AI Coach</span></a></li>
+        <li><a href="#" data-section="health"><i class="fas fa-heartbeat"></i><span data-i18n="nav.health">Health Guardian</span></a></li>
+        <li><a href="#" data-section="injury"><i class="fas fa-shield-alt"></i><span data-i18n="nav.injury">Injury Prevention</span></a></li>
+        <li><a href="#" data-section="tactical"><i class="fas fa-chess-board"></i><span data-i18n="nav.tactical">Tactical Intelligence</span></a></li>
+        <li><a href="#" data-section="talent"><i class="fas fa-star"></i><span data-i18n="nav.talent">Talent ID</span></a></li>
+        <li><a href="#" data-section="national"><i class="fas fa-flag"></i><span data-i18n="nav.national">National Dashboards</span></a></li>
+        <li><a href="#" data-section="research"><i class="fas fa-flask"></i><span data-i18n="nav.research">Research Center</span></a></li>
+        <li><a href="#" data-section="chat"><i class="fas fa-comment-dots"></i><span data-i18n="nav.chat">AI Chat</span></a></li>
+        <li><a href="#" data-section="vr"><i class="fas fa-vr-cardboard"></i><span data-i18n="nav.vr">VR &amp; AR</span></a></li>
+        <li><a href="#" data-section="video"><i class="fas fa-video"></i><span data-i18n="nav.video">Video Analytics</span></a></li>
+        <li><a href="#" data-section="simulator"><i class="fas fa-gamepad"></i><span data-i18n="nav.simulator">Competition Sim</span></a></li>
+        <li><a href="#" data-section="nutrition"><i class="fas fa-utensils"></i><span data-i18n="nav.nutrition">AI Nutrition</span></a></li>
+        <li><a href="#" data-section="passport"><i class="fas fa-id-card"></i><span data-i18n="nav.passport">Digital Passport</span></a></li>
+        <li><a href="#" data-section="olympic"><i class="fas fa-trophy"></i><span data-i18n="nav.olympic">Olympic Digital Twin</span></a></li>
+        <li><a href="#" data-section="xai"><i class="fas fa-lightbulb"></i><span data-i18n="nav.xai">Explainable AI</span></a></li>
+        <li><a href="#" data-section="evidence"><i class="fas fa-book-open"></i><span data-i18n="nav.evidence">Scientific Evidence</span></a></li>
+        <li><a href="#" data-section="future"><i class="fas fa-city"></i><span data-i18n="nav.future">Digital Olympic City</span><span class="badge" data-i18n="nav.vision">Vision</span></a></li>
+    </ul>
+</nav>
+
+<!-- المحتوى الرئيسي -->
+<div class="main-content" id="mainContent">
+
+    <!-- الشريط العلوي -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1><i class="fas fa-microchip" style="color:var(--accent-gold);"></i> <span data-i18n="app.title">Digital Twin Sports</span></h1>
+        </div>
+        <div class="topbar-actions">
+            <span class="datetime" id="datetimeDisplay"><i class="far fa-clock"></i> loading...</span>
+            <button class="lang-toggle" id="langToggle"><i class="fas fa-globe"></i> <span id="langLabel">English</span></button>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="module-section active" id="section-dashboard">
+        <div class="section-header">
+            <h2><i class="fas fa-th-large"></i> <span data-i18n="dashboard.title">Platform Dashboard</span></h2>
+            <span class="subtitle"><i class="fas fa-circle" style="color:var(--accent-green);font-size:0.6rem;"></i> <span data-i18n="dashboard.status">All systems operational</span></span>
+        </div>
+        <div class="grid-4">
+            <div class="card"><div class="card-header"><i class="fas fa-robot"></i><h3 data-i18n="dashboard.aiModules">AI Modules</h3><span class="card-badge">17</span></div><div class="card-body" data-i18n="dashboard.aiDesc">Active AI engines monitoring performance, health, and tactics in real‑time.</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-user-astronaut"></i><h3 data-i18n="dashboard.digitalTwins">Digital Twins</h3><span class="card-badge">128</span></div><div class="card-body" data-i18n="dashboard.twinsDesc">Athletes, teams, facilities &amp; competitions simulated.</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-chart-line"></i><h3 data-i18n="dashboard.prediction">Prediction Accuracy</h3><span class="card-badge">94%</span></div><div class="card-body" data-i18n="dashboard.predDesc">Injury risk &amp; performance forecasting confidence.</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-medal"></i><h3 data-i18n="dashboard.olympicPotential">Olympic Potential</h3><span class="card-badge">+32%</span></div><div class="card-body" data-i18n="dashboard.olympicDesc">Identified talent pool growth this quarter.</div></div>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-bolt"></i><h3 data-i18n="dashboard.liveStatus">Live Athlete Status</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="dashboard.fatigue">Fatigue Index</span><span class="value orange">67%</span></div>
+                    <div class="progress-bar"><div class="fill orange" style="width:67%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="dashboard.recovery">Recovery Score</span><span class="value green">82%</span></div>
+                    <div class="progress-bar"><div class="fill green" style="width:82%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="dashboard.readiness">Readiness</span><span class="value cyan">91%</span></div>
+                    <div class="progress-bar"><div class="fill" style="width:91%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="dashboard.injuryRisk">Injury Risk</span><span class="value red">23%</span></div>
+                    <div class="progress-bar"><div class="fill red" style="width:23%;"></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-clock"></i><h3 data-i18n="dashboard.upcoming">Upcoming Simulations</h3></div>
+                <div class="card-body">
+                    <div class="data-row"><span class="label" data-i18n="dashboard.sim1">Training Load Optimisation</span><span class="value">15 min</span></div>
+                    <div class="data-row"><span class="label" data-i18n="dashboard.sim2">Tactical Opponent Analysis</span><span class="value">32 min</span></div>
+                    <div class="data-row"><span class="label" data-i18n="dashboard.sim3">Heat Adaptation Protocol</span><span class="value">10 min</span></div>
+                    <div class="data-row"><span class="label" data-i18n="dashboard.sim4">Injury Prevention Scan</span><span class="value">5 min</span></div>
+                    <div class="mt-1"><span class="tag gold"><i class="fas fa-robot"></i> <span data-i18n="dashboard.aiActive">AI active</span></span><span class="tag cyan"><i class="fas fa-sync-alt"></i> <span data-i18n="dashboard.synced">synced</span></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DIGITAL TWINS ===== -->
+    <div class="module-section" id="section-twins">
+        <div class="section-header">
+            <h2><i class="fas fa-cubes"></i> <span data-i18n="twins.title">Digital Twin Laboratory</span></h2>
+            <span class="subtitle"><span class="tag gold" data-i18n="twins.new">NEW</span> <span data-i18n="twins.sub">Simulate unlimited scenarios</span></span>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-dumbbell"></i><h3 data-i18n="twins.load">Training Load Simulation</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="twins.currentLoad">Current Load</span><span class="value orange">78%</span></div>
+                    <div class="progress-bar"><div class="fill orange" style="width:78%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="twins.optimalLoad">Optimal Load</span><span class="value green">65%</span></div>
+                    <div class="progress-bar"><div class="fill green" style="width:65%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="twins.fatigueAcc">Fatigue Accumulation</span><span class="value red">42%</span></div>
+                    <div class="progress-bar"><div class="fill red" style="width:42%;"></div></div>
+                    <div class="mt-1"><span class="tag" data-i18n="twins.recStrategy">Recovery strategy: active</span><span class="tag gold" data-i18n="twins.prediction">prediction: +8% performance</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-thermometer-half"></i><h3 data-i18n="twins.environment">Environmental &amp; Altitude</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="twins.altitude">Altitude (m)</span><span class="value">2,200</span></div>
+                    <div class="stat"><span class="label" data-i18n="twins.temp">Temperature (°C)</span><span class="value">34</span></div>
+                    <div class="stat"><span class="label" data-i18n="twins.humidity">Humidity (%)</span><span class="value">62</span></div>
+                    <div class="stat"><span class="label" data-i18n="twins.heatAdapt">Heat Adaptation</span><span class="value cyan">78%</span></div>
+                    <div class="progress-bar"><div class="fill" style="width:78%;"></div></div>
+                    <div class="mt-1"><span class="tag" data-i18n="twins.oppStrategy">Opponent strategy: high press</span><span class="tag cyan" data-i18n="twins.simRunning">simulation running</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-futbol"></i><h3 data-i18n="twins.tactical">Tactical &amp; Competition</h3></div>
+                <div class="card-body">
+                    <div class="twin-grid">
+                        <span class="twin-tag"><i class="fas fa-chess-queen"></i> <span data-i18n="twins.formation">Formation</span></span>
+                        <span class="twin-tag"><i class="fas fa-running"></i> <span data-i18n="twins.pressing">Pressing</span></span>
+                        <span class="twin-tag"><i class="fas fa-arrow-right"></i> <span data-i18n="twins.transition">Transition</span></span>
+                        <span class="twin-tag"><i class="fas fa-shield-alt"></i> <span data-i18n="twins.defense">Defense</span></span>
+                        <span class="twin-tag"><i class="fas fa-bolt"></i> <span data-i18n="twins.counter">Counter</span></span>
+                        <span class="twin-tag"><i class="fas fa-users"></i> <span data-i18n="twins.setPieces">Set Pieces</span></span>
+                    </div>
+                    <div class="stat mt-1"><span class="label" data-i18n="twins.winProb">Win Probability</span><span class="value gold">63%</span></div>
+                    <div class="progress-bar"><div class="fill gold" style="width:63%;"></div></div>
+                    <span class="tag"><i class="fas fa-robot"></i> <span data-i18n="twins.tactRec">AI tactical recommendation ready</span></span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-microchip"></i><h3 data-i18n="twins.injuryProb">Injury Probability</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="twins.acl">ACL Risk</span><span class="value orange">14%</span></div>
+                    <div class="progress-bar"><div class="fill orange" style="width:14%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="twins.hamstring">Hamstring</span><span class="value red">27%</span></div>
+                    <div class="progress-bar"><div class="fill red" style="width:27%;"></div></div>
+                    <div class="stat"><span class="label" data-i18n="twins.overuse">Overuse</span><span class="value cyan">8%</span></div>
+                    <div class="progress-bar"><div class="fill" style="width:8%;"></div></div>
+                    <span class="tag gold"><i class="fas fa-shield-alt"></i> <span data-i18n="twins.prevProtocol">prevention protocol active</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== AI SPORTS SCIENTIST ===== -->
+    <div class="module-section" id="section-scientist">
+        <div class="section-header">
+            <h2><i class="fas fa-brain"></i> <span data-i18n="scientist.title">AI Sports Scientist</span></h2>
+            <span class="subtitle" data-i18n="scientist.sub">Automatic evaluation &amp; recommendations</span>
+        </div>
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-chart-bar"></i><h3 data-i18n="scientist.trainingRecovery">Training &amp; Recovery</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="scientist.load">Training Load</span><span class="value orange">High</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.recovery">Recovery</span><span class="value green">Adequate</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.overtraining">Overtraining</span><span class="value cyan">Low risk</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.readiness">Readiness</span><span class="value gold">92%</span></div>
+                    <div class="mt-1"><span class="tag gold"><i class="fas fa-lightbulb"></i> <span data-i18n="scientist.recLoad">Recommendation: reduce load by 10%</span></span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-heart"></i><h3 data-i18n="scientist.physio">Physiological &amp; Hormonal</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label">HRV</span><span class="value green">78 ms</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.cortisol">Cortisol</span><span class="value orange">Elevated</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.testosterone">Testosterone</span><span class="value cyan">Normal</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.energy">Energy Systems</span><span class="value gold">Aerobic dominant</span></div>
+                    <span class="tag" data-i18n="scientist.biomech">Biomechanics: efficient</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-running"></i><h3 data-i18n="scientist.performance">Performance &amp; Plateau</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="scientist.adaptation">Adaptation</span><span class="value green">Positive</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.plateau">Plateau</span><span class="value cyan">No</span></div>
+                    <div class="stat"><span class="label" data-i18n="scientist.economy">Movement Economy</span><span class="value gold">89%</span></div>
+                    <div class="progress-bar"><div class="fill gold" style="width:89%;"></div></div>
+                    <span class="tag cyan"><i class="fas fa-robot"></i> <span data-i18n="scientist.neuromuscular">neuromuscular readiness: high</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== AI COACH ===== -->
+    <div class="module-section" id="section-coach">
+        <div class="section-header">
+            <h2><i class="fas fa-chalkboard-teacher"></i> <span data-i18n="coach.title">AI Coach Assistant</span></h2>
+            <span class="subtitle" data-i18n="coach.sub">Daily &rarr; season planning</span>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-calendar-day"></i><h3 data-i18n="coach.daily">Daily Training</h3></div>
+                <div class="card-body">
+                    <div class="data-row"><span class="label" data-i18n="coach.warmup">Warm-up</span><span class="value">15 min dynamic</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.main">Main session</span><span class="value">45 min tactical</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.strength">Strength</span><span class="value">20 min plyometric</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.cooldown">Cool-down</span><span class="value">10 min stretching</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.nutrition">Nutrition</span><span class="value cyan">carb loading</span></div>
+                    <span class="tag gold"><i class="fas fa-check-circle"></i> <span data-i18n="coach.ready">ready</span></span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-calendar-alt"></i><h3 data-i18n="coach.weekly">Weekly &amp; Season Plan</h3></div>
+                <div class="card-body">
+                    <div class="data-row"><span class="label" data-i18n="coach.volume">Weekly volume</span><span class="value">820 min</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.intensity">Intensity</span><span class="value orange">moderate-high</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.taper">Taper</span><span class="value cyan">7 days out</span></div>
+                    <div class="data-row"><span class="label" data-i18n="coach.recoverySessions">Recovery sessions</span><span class="value green">3 / week</span></div>
+                    <span class="tag" data-i18n="coach.psych">psychological prep: visualisation</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-tachometer-alt"></i><h3 data-i18n="coach.compTaper">Competition Taper</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="coach.daysToComp">Days to comp</span><span class="value">6</span></div>
+                    <div class="stat"><span class="label" data-i18n="coach.loadReduction">Load reduction</span><span class="value green">-40%</span></div>
+                    <div class="stat"><span class="label" data-i18n="coach.sleepFocus">Sleep focus</span><span class="value gold">9h target</span></div>
+                    <span class="tag cyan"><i class="fas fa-robot"></i> <span data-i18n="coach.aiStrategy">AI strategy: peak performance</span></span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-water"></i><h3 data-i18n="coach.hydration">Hydration &amp; Nutrition</h3></div>
+                <div class="card-body">
+                    <div class="stat"><span class="label" data-i18n="coach.fluid">Fluid intake</span><span class="value">2.8 L</span></div>
+                    <div class="stat"><span class="label" data-i18n="coach.carbs">Carbs</span><span class="value">6 g/kg</span></div>
+                    <div class="stat"><span class="label" data-i18n="coach.protein">Protein</span><span class="value">1.8 g/kg</span></div>
+                    <span class="tag gold" data-i18n="coach.supplement">supplement: electrolytes + BCAAs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HEALTH GUARDIAN ===== -->
+    <div class="module-section" id="section-health">
+        <div class="section-header">
+            <h2><i class="fas fa-heartbeat"></i> <span data-i18n="health.title">Athlete Health Guardian</span></h2>
+            <span class="subtitle" data-i18n="health.sub">Continuous monitoring &amp; alerts</span>
+        </div>
+        <div class="grid-3">
+            <div class="card"><div class="card-header"><i class="fas fa-heart"></i><h3 data-i18n="health.cardiovascular">Cardiovascular</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="health.heartRate">Heart Rate</span><span class="value">68 bpm</span></div><div class="stat"><span class="label">HRV</span><span class="value green">82 ms</span></div><div class="stat"><span class="label" data-i18n="health.bloodPressure">Blood Pressure</span><span class="value">118/72</span></div><span class="tag green" data-i18n="health.stable">stable</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-lungs"></i><h3 data-i18n="health.respiratory">Respiratory</h3></div><div class="card-body"><div class="stat"><span class="label">SpO₂</span><span class="value">98%</span></div><div class="stat"><span class="label" data-i18n="health.respRate">Respiratory Rate</span><span class="value">14 /min</span></div><span class="tag cyan" data-i18n="health.normal">normal</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-bed"></i><h3 data-i18n="health.sleepStress">Sleep &amp; Stress</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="health.sleep">Sleep</span><span class="value green">7.8 h</span></div><div class="stat"><span class="label" data-i18n="health.stress">Stress Index</span><span class="value orange">32%</span></div><div class="stat"><span class="label" data-i18n="health.recovery">Recovery</span><span class="value gold">85%</span></div><span class="tag" data-i18n="health.fatigue">fatigue: moderate</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-flask"></i><h3 data-i18n="health.biomarkers">Blood Biomarkers</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="health.hemoglobin">Hemoglobin</span><span class="value">15.2 g/dL</span></div><div class="stat"><span class="label" data-i18n="health.ferritin">Ferritin</span><span class="value">112 ng/mL</span></div><div class="stat"><span class="label" data-i18n="health.vitaminD">Vitamin D</span><span class="value gold">48 ng/mL</span></div><span class="tag gold" data-i18n="health.optimal">optimal</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-exclamation-triangle"></i><h3 data-i18n="health.riskAlerts">Risk Alerts</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="health.cardiovascularRisk">Cardiovascular</span><span class="value green">low</span></div><div class="stat"><span class="label" data-i18n="health.heatExhaustion">Heat exhaustion</span><span class="value cyan">low</span></div><div class="stat"><span class="label" data-i18n="health.emergency">Emergency</span><span class="value green">none</span></div><span class="tag green"><i class="fas fa-check"></i> <span data-i18n="health.allClear">all clear</span></span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-ambulance"></i><h3 data-i18n="health.emergencyNotif">Emergency Notifications</h3></div><div class="card-body"><span class="tag" data-i18n="health.noAlerts">No active alerts</span><div class="mt-1"><span class="tag cyan" data-i18n="health.lastCheck">last check: 2 min ago</span></div></div></div>
+        </div>
+    </div>
+
+    <!-- ===== INJURY PREVENTION ===== -->
+    <div class="module-section" id="section-injury">
+        <div class="section-header">
+            <h2><i class="fas fa-shield-alt"></i> <span data-i18n="injury.title">Smart Injury Prevention</span></h2>
+            <span class="subtitle" data-i18n="injury.sub">Predict &amp; prevent</span>
+        </div>
+        <div class="grid-3">
+            <div class="card"><div class="card-header"><i class="fas fa-bone"></i><h3 data-i18n="injury.aclHamstring">ACL / Hamstring</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="injury.aclRisk">ACL Risk</span><span class="value orange">14%</span></div><div class="progress-bar"><div class="fill orange" style="width:14%;"></div></div><div class="stat"><span class="label" data-i18n="injury.hamstringRisk">Hamstring</span><span class="value red">27%</span></div><div class="progress-bar"><div class="fill red" style="width:27%;"></div></div><span class="tag gold" data-i18n="injury.prevStrengthening">prevention: eccentric strengthening</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-hand-paper"></i><h3 data-i18n="injury.muscleShoulder">Muscle &amp; Shoulder</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="injury.muscleStrains">Muscle strains</span><span class="value cyan">8%</span></div><div class="stat"><span class="label" data-i18n="injury.shoulderInjuries">Shoulder injuries</span><span class="value green">5%</span></div><div class="stat"><span class="label" data-i18n="injury.overuseInjuries">Overuse</span><span class="value orange">19%</span></div><span class="tag" data-i18n="injury.rotatorCuff">rotator cuff: stable</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-thermometer-full"></i><h3 data-i18n="injury.heatCardio">Heat &amp; Cardiovascular</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="injury.heatExhaustionRisk">Heat exhaustion</span><span class="value green">2%</span></div><div class="stat"><span class="label" data-i18n="injury.cardioRisk">Cardiovascular risk</span><span class="value green">1%</span></div><span class="tag cyan" data-i18n="injury.returnToPlay">return-to-play readiness: 92%</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== TACTICAL INTELLIGENCE ===== -->
+    <div class="module-section" id="section-tactical">
+        <div class="section-header">
+            <h2><i class="fas fa-chess-board"></i> <span data-i18n="tactical.title">Tactical Intelligence</span></h2>
+            <span class="subtitle" data-i18n="tactical.sub">Opponent analysis &amp; recommendations</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-user-friends"></i><h3 data-i18n="tactical.opponent">Opponent Behavior</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="tactical.playingStyle">Playing style</span><span class="value">Possession 58%</span></div><div class="stat"><span class="label" data-i18n="tactical.decisionMaking">Decision making</span><span class="value gold">Creative</span></div><div class="stat"><span class="label" data-i18n="tactical.reactionPatterns">Reaction patterns</span><span class="value cyan">High press</span></div><span class="tag" data-i18n="tactical.winningStrategy">winning strategy: counter‑attack</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-fire"></i><h3 data-i18n="tactical.heatMaps">Heat &amp; Movement Maps</h3></div><div class="card-body"><div class="heatmap-mock"><div class="cell low"></div><div class="cell med"></div><div class="cell high"></div><div class="cell peak"></div><div class="cell med"></div><div class="cell low"></div><div class="cell low"></div><div class="cell high"></div><div class="cell peak"></div><div class="cell peak"></div><div class="cell high"></div><div class="cell med"></div><div class="cell med"></div><div class="cell peak"></div><div class="cell high"></div><div class="cell med"></div><div class="cell med"></div><div class="cell low"></div><div class="cell low"></div><div class="cell med"></div><div class="cell high"></div><div class="cell peak"></div><div class="cell med"></div><div class="cell low"></div></div><span class="tag gold" data-i18n="tactical.attackPattern">attack pattern: left flank</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-robot"></i><h3 data-i18n="tactical.recommendations">Automatic Recommendations</h3></div><div class="card-body"><div class="data-row"><span class="label" data-i18n="tactical.formation">Formation</span><span class="value cyan">4-3-3</span></div><div class="data-row"><span class="label" data-i18n="tactical.pressingTrigger">Pressing trigger</span><span class="value">CB pass</span></div><div class="data-row"><span class="label" data-i18n="tactical.setPiece">Set piece</span><span class="value gold">near post</span></div><span class="tag"><i class="fas fa-check"></i> <span data-i18n="tactical.planReady">AI tactical plan ready</span></span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-chart-pie"></i><h3 data-i18n="tactical.defenseAttack">Defense &amp; Attack</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="tactical.defensePattern">Defense pattern</span><span class="value">Zonal</span></div><div class="stat"><span class="label" data-i18n="tactical.attackPattern">Attack pattern</span><span class="value gold">Counter</span></div><div class="stat"><span class="label" data-i18n="tactical.winProbability">Win probability</span><span class="value cyan">67%</span></div><span class="tag" data-i18n="tactical.tacticalRating">tactical rating: A-</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== TALENT ID ===== -->
+    <div class="module-section" id="section-talent">
+        <div class="section-header">
+            <h2><i class="fas fa-star"></i> <span data-i18n="talent.title">Talent Identification AI</span></h2>
+            <span class="subtitle" data-i18n="talent.sub">Discover future champions</span>
+        </div>
+        <div class="grid-3">
+            <div class="card"><div class="card-header"><i class="fas fa-user-graduate"></i><h3 data-i18n="talent.prospects">Top Prospects</h3></div><div class="card-body"><div class="stat"><span class="label">Ahmed K.</span><span class="value gold">98%</span></div><div class="stat"><span class="label">Layla M.</span><span class="value cyan">94%</span></div><div class="stat"><span class="label">Omar H.</span><span class="value green">91%</span></div><span class="tag gold" data-i18n="talent.olympicPotential">Olympic potential: high</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-futbol"></i><h3 data-i18n="talent.bestPosition">Best Position</h3></div><div class="card-body"><div class="stat"><span class="label">Ahmed K.</span><span class="value">Striker</span></div><div class="stat"><span class="label">Layla M.</span><span class="value">Midfielder</span></div><div class="stat"><span class="label">Omar H.</span><span class="value">Defender</span></div><span class="tag cyan" data-i18n="talent.eliteSimilarity">elite similarity: 89%</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-trophy"></i><h3 data-i18n="talent.potentialRanking">Potential Ranking</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="talent.nationalRank">National rank</span><span class="value gold">#3</span></div><div class="stat"><span class="label" data-i18n="talent.worldRank">World rank</span><span class="value cyan">#22</span></div><div class="stat"><span class="label" data-i18n="talent.olympicPotentialScore">Olympic potential</span><span class="value green">82%</span></div><span class="tag" data-i18n="talent.recommendedSport">recommend sport: football</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== NATIONAL DASHBOARDS ===== -->
+    <div class="module-section" id="section-national">
+        <div class="section-header">
+            <h2><i class="fas fa-flag"></i> <span data-i18n="national.title">National Team Dashboards</span></h2>
+            <span class="subtitle" data-i18n="national.sub">Olympic Committee &amp; Federations</span>
+        </div>
+        <div class="grid-4">
+            <div class="card"><div class="card-header"><i class="fas fa-landmark"></i><h3 data-i18n="national.olympicCommittee">Olympic Committee</h3></div><div class="card-body">Athletes: 342 | Medals: 18</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-futbol"></i><h3 data-i18n="national.footballFederation">Football Federation</h3></div><div class="card-body">National team: rank 12</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-running"></i><h3 data-i18n="national.clubs">National Clubs</h3></div><div class="card-body">Academies: 28</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-university"></i><h3 data-i18n="national.universities">Universities</h3></div><div class="card-body">Sports schools: 14</div></div>
+        </div>
+    </div>
+
+    <!-- ===== RESEARCH CENTER ===== -->
+    <div class="module-section" id="section-research">
+        <div class="section-header">
+            <h2><i class="fas fa-flask"></i> <span data-i18n="research.title">Research Center</span></h2>
+            <span class="subtitle" data-i18n="research.sub">Export, analyse, publish</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-database"></i><h3 data-i18n="research.datasets">Datasets &amp; Analysis</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="research.athletes">Athletes</span><span class="value">1,247</span></div><div class="stat"><span class="label" data-i18n="research.variables">Variables</span><span class="value">312</span></div><div class="stat"><span class="label" data-i18n="research.mlModels">ML models</span><span class="value gold">9</span></div><span class="tag"><i class="fas fa-file-export"></i> <span data-i18n="research.export">export CSV</span></span><span class="tag cyan" data-i18n="research.apa">APA references</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-file-alt"></i><h3 data-i18n="research.reports">Scientific Reports</h3></div><div class="card-body"><div class="data-row"><span class="label" data-i18n="research.comparative">Comparative study</span><span class="value">Egypt vs. Spain</span></div><div class="data-row"><span class="label" data-i18n="research.publication">Publication</span><span class="value gold">Sports Medicine</span></div><span class="tag">DOI: 10.1234/sport.2025</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== AI CHAT ===== -->
+    <div class="module-section" id="section-chat">
+        <div class="section-header">
+            <h2><i class="fas fa-comment-dots"></i> <span data-i18n="chat.title">AI Chat Assistant</span></h2>
+            <span class="subtitle" data-i18n="chat.sub">Multilingual sports science Q&amp;A</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-robot"></i><h3 data-i18n="chat.conversation">Conversation</h3></div><div class="card-body"><div class="chat-message"><div class="sender" data-i18n="chat.you">You</div><div class="msg" data-i18n="chat.msg1">How to improve recovery after intense training?</div></div><div class="chat-message"><div class="sender" data-i18n="chat.ai">AI Assistant</div><div class="msg" data-i18n="chat.msg2">Active recovery, 8h sleep, 1.6g/kg protein, hydration, and cold‑water immersion. Evidence: IOC consensus 2023.</div></div><div class="chat-message"><div class="sender" data-i18n="chat.you">You</div><div class="msg" data-i18n="chat.msg3">What about heat adaptation?</div></div><div class="chat-message"><div class="sender" data-i18n="chat.ai">AI Assistant</div><div class="msg" data-i18n="chat.msg4">Gradual exposure 90 min/day, 14‑21 days, hydration with electrolytes. PubMed: PMID 34567890.</div></div><span class="tag gold"><i class="fas fa-microphone"></i> <span data-i18n="chat.voice">voice input ready</span></span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-language"></i><h3 data-i18n="chat.language">Language &amp; Topics</h3></div><div class="card-body"><span class="tag cyan">Arabic</span><span class="tag gold">English</span><div class="mt-1"><span class="tag" data-i18n="chat.topicNutrition">Nutrition</span><span class="tag" data-i18n="chat.topicRecovery">Recovery</span><span class="tag" data-i18n="chat.topicBiomechanics">Biomechanics</span></div><div class="mt-1"><span class="tag" data-i18n="chat.topicPsychology">Psychology</span><span class="tag" data-i18n="chat.topicInjury">Injury</span><span class="tag" data-i18n="chat.topicStatistics">Statistics</span></div></div></div>
+        </div>
+    </div>
+
+    <!-- ===== VR & AR ===== -->
+    <div class="module-section" id="section-vr">
+        <div class="section-header">
+            <h2><i class="fas fa-vr-cardboard"></i> <span data-i18n="vr.title">VR &amp; AR Training</span></h2>
+            <span class="subtitle" data-i18n="vr.sub">Immersive simulation</span>
+        </div>
+        <div class="grid-3">
+            <div class="card"><div class="card-header"><i class="fas fa-headset"></i><h3 data-i18n="vr.virtual">Virtual Reality</h3></div><div class="card-body" data-i18n="vr.virtualDesc">3D training scenarios. Holographic coach available.</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-glasses"></i><h3 data-i18n="vr.augmented">Augmented Reality</h3></div><div class="card-body" data-i18n="vr.augmentedDesc">Real‑time tactical overlay on field.</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-cube"></i><h3 data-i18n="vr.mixed">Mixed Reality</h3></div><div class="card-body" data-i18n="vr.mixedDesc">Immersive competition simulation.</div></div>
+        </div>
+    </div>
+
+    <!-- ===== VIDEO ANALYTICS ===== -->
+    <div class="module-section" id="section-video">
+        <div class="section-header">
+            <h2><i class="fas fa-video"></i> <span data-i18n="video.title">Intelligent Video Analytics</span></h2>
+            <span class="subtitle" data-i18n="video.sub">Automatic error detection &amp; correction</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-bolt"></i><h3 data-i18n="video.movement">Movement Quality</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="video.jointAngles">Joint angles</span><span class="value gold">optimal</span></div><div class="stat"><span class="label" data-i18n="video.reactionTime">Reaction time</span><span class="value">0.22 s</span></div><div class="stat"><span class="label" data-i18n="video.speed">Speed</span><span class="value cyan">8.4 m/s</span></div><span class="tag" data-i18n="video.correction">correction: arm swing</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-edit"></i><h3 data-i18n="video.autoCorrection">Automatic Correction</h3></div><div class="card-body"><div class="data-row"><span class="label" data-i18n="video.techError">Technical error</span><span class="value red">foot placement</span></div><div class="data-row"><span class="label" data-i18n="video.fix">Recommended fix</span><span class="value green">adjust by 12°</span></div><span class="tag gold"><i class="fas fa-check"></i> <span data-i18n="video.applied">correction applied</span></span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== COMPETITION SIMULATOR ===== -->
+    <div class="module-section" id="section-simulator">
+        <div class="section-header">
+            <h2><i class="fas fa-gamepad"></i> <span data-i18n="sim.title">Smart Competition Simulator</span></h2>
+            <span class="subtitle" data-i18n="sim.sub">Pre‑competition prediction</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-chess"></i><h3 data-i18n="sim.opponentEnv">Opponent &amp; Environment</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="sim.opponent">Opponent</span><span class="value">Spain</span></div><div class="stat"><span class="label" data-i18n="sim.weather">Weather</span><span class="value">28°C, 60% humidity</span></div><div class="stat"><span class="label" data-i18n="sim.crowd">Crowd</span><span class="value gold">45,000</span></div><span class="tag" data-i18n="sim.stress">psychological stress: moderate</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-chart-simple"></i><h3 data-i18n="sim.prediction">Prediction</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="sim.expectedRank">Expected ranking</span><span class="value gold">#3</span></div><div class="stat"><span class="label" data-i18n="sim.winProb">Winning probability</span><span class="value cyan">71%</span></div><div class="progress-bar"><div class="fill" style="width:71%;"></div></div><span class="tag" data-i18n="sim.fatigueImpact">fatigue impact: -4%</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== AI NUTRITION ===== -->
+    <div class="module-section" id="section-nutrition">
+        <div class="section-header">
+            <h2><i class="fas fa-utensils"></i> <span data-i18n="nutrition.title">AI Nutrition Engine</span></h2>
+            <span class="subtitle" data-i18n="nutrition.sub">Daily meals &amp; competition nutrition</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-apple-alt"></i><h3 data-i18n="nutrition.daily">Daily Plan</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="nutrition.calories">Calories</span><span class="value">2,840 kcal</span></div><div class="stat"><span class="label" data-i18n="nutrition.carbs">Carbs</span><span class="value">380 g</span></div><div class="stat"><span class="label" data-i18n="nutrition.protein">Protein</span><span class="value">170 g</span></div><div class="stat"><span class="label" data-i18n="nutrition.fat">Fat</span><span class="value">70 g</span></div><span class="tag" data-i18n="nutrition.hydration">hydration: 3.2 L</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-clock"></i><h3 data-i18n="nutrition.comp">Competition Nutrition</h3></div><div class="card-body"><div class="data-row"><span class="label" data-i18n="nutrition.preComp">Pre‑comp meal</span><span class="value">pasta + chicken</span></div><div class="data-row"><span class="label" data-i18n="nutrition.during">During</span><span class="value">electrolytes + gel</span></div><div class="data-row"><span class="label" data-i18n="nutrition.postComp">Post‑comp</span><span class="value gold">protein shake + carbs</span></div><span class="tag cyan" data-i18n="nutrition.supplement">supplement: creatine</span></div></div>
+        </div>
+    </div>
+
+    <!-- ===== DIGITAL PASSPORT (مع نموذج الإدخال) ===== -->
+    <div class="module-section" id="section-passport">
+        <div class="section-header">
+            <h2><i class="fas fa-id-card"></i> <span data-i18n="passport.title">Athlete Digital Passport</span></h2>
+            <span class="subtitle" data-i18n="passport.sub">Complete digital identity</span>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-user-circle"></i><h3 data-i18n="passport.profile">Profile</h3></div>
+                <div class="card-body" id="passportProfile">
+                    <div id="athleteDisplay">
+                        <div class="stat"><span class="label" data-i18n="passport.name">Name</span><span class="value" id="dispName">Ahmed K.</span></div>
+                        <div class="stat"><span class="label" data-i18n="passport.sport">Sport</span><span class="value" id="dispSport">Football</span></div>
+                        <div class="stat"><span class="label" data-i18n="passport.age">Age</span><span class="value" id="dispAge">22</span></div>
+                        <div class="stat"><span class="label" data-i18n="passport.nationality">Nationality</span><span class="value" id="dispNationality">Egypt</span></div>
+                    </div>
+                    <div class="mt-1">
+                        <span class="tag" data-i18n="passport.history">Injuries: 2 | Competitions: 47</span>
+                        <span class="tag gold" data-i18n="passport.achievements">Gold medal (2024), MVP</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="fas fa-plus-circle"></i><h3 data-i18n="passport.addAthlete">Add New Athlete</h3></div>
+                <div class="card-body">
+                    <form id="athleteForm">
+                        <div class="form-group">
+                            <label data-i18n="passport.name">Name</label>
+                            <input type="text" id="athleteName" placeholder="e.g. Mohamed Salah" required />
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="passport.sport">Sport</label>
+                            <select id="athleteSport">
+                                <option value="Football">Football</option>
+                                <option value="Basketball">Basketball</option>
+                                <option value="Swimming">Swimming</option>
+                                <option value="Athletics">Athletics</option>
+                                <option value="Gymnastics">Gymnastics</option>
+                                <option value="Tennis">Tennis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="passport.age">Age</label>
+                            <input type="number" id="athleteAge" placeholder="22" required min="10" max="60" />
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="passport.nationality">Nationality</label>
+                            <input type="text" id="athleteNationality" placeholder="e.g. Egypt" required />
+                        </div>
+                        <button type="submit" class="btn-primary" data-i18n="passport.addBtn">Add Athlete</button>
+                    </form>
+                    <div id="athleteListContainer" class="mt-1">
+                        <h4 style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:0.3rem;" data-i18n="passport.list">Athletes List</h4>
+                        <div class="athlete-list" id="athleteList">
+                            <!-- سيتم تعبئتها بواسطة JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== OLYMPIC DIGITAL TWIN ===== -->
+    <div class="module-section" id="section-olympic">
+        <div class="section-header">
+            <h2><i class="fas fa-trophy"></i> <span data-i18n="olympic.title">Olympic Digital Twin Platform</span></h2>
+            <span class="subtitle" data-i18n="olympic.sub">Athletes · Teams · Facilities</span>
+        </div>
+        <div class="grid-4">
+            <div class="card"><div class="card-header"><i class="fas fa-user-astronaut"></i><h3 data-i18n="olympic.athletes">Athletes</h3></div><div class="card-body">342 digital twins</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-users"></i><h3 data-i18n="olympic.teams">Teams</h3></div><div class="card-body">28 teams</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-building"></i><h3 data-i18n="olympic.facilities">Facilities</h3></div><div class="card-body">12 training centers</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-flag"></i><h3 data-i18n="olympic.federations">Federations</h3></div><div class="card-body">8 national</div></div>
+        </div>
+    </div>
+
+    <!-- ===== XAI ===== -->
+    <div class="module-section" id="section-xai">
+        <div class="section-header">
+            <h2><i class="fas fa-lightbulb"></i> <span data-i18n="xai.title">Explainable AI (XAI)</span></h2>
+            <span class="subtitle" data-i18n="xai.sub">Why? Evidence · Confidence</span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-question-circle"></i><h3 data-i18n="xai.explanation">Recommendation Explanation</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="xai.why">Why reduce load?</span><span class="value">Fatigue index 78%</span></div><div class="stat"><span class="label" data-i18n="xai.evidence">Evidence</span><span class="value cyan">IOC consensus 2023</span></div><div class="stat"><span class="label" data-i18n="xai.confidence">Confidence</span><span class="value gold">94%</span></div><span class="tag" data-i18n="xai.predConf">prediction confidence: 92%</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-book"></i><h3 data-i18n="xai.references">Scientific References</h3></div><div class="card-body"><div class="data-row"><span class="label">PubMed</span><span class="value">PMID 34567890</span></div><div class="data-row"><span class="label">Scopus</span><span class="value">2-s2.0-851234567</span></div><div class="data-row"><span class="label">Web of Science</span><span class="value">WOS:000123456</span></div></div></div>
+        </div>
+    </div>
+
+    <!-- ===== SCIENTIFIC EVIDENCE ===== -->
+    <div class="module-section" id="section-evidence">
+        <div class="section-header">
+            <h2><i class="fas fa-book-open"></i> <span data-i18n="evidence.title">Scientific Evidence Module</span></h2>
+            <span class="subtitle" data-i18n="evidence.sub">PubMed · Scopus · IOC · ACSM · NSCA · FIFA</span>
+        </div>
+        <div class="grid-3">
+            <div class="card"><div class="card-header"><i class="fas fa-file-medical"></i><h3>PubMed</h3></div><div class="card-body" data-i18n="evidence.pubmed">24 references cited</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-globe"></i><h3>IOC Consensus</h3></div><div class="card-body" data-i18n="evidence.ioc">2023 guidelines applied</div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-dumbbell"></i><h3>NSCA / ACSM</h3></div><div class="card-body" data-i18n="evidence.nsca">Strength &amp; conditioning evidence</div></div>
+        </div>
+    </div>
+
+    <!-- ===== FUTURE VISION ===== -->
+    <div class="module-section" id="section-future">
+        <div class="section-header">
+            <h2><i class="fas fa-city"></i> <span data-i18n="future.title">Digital Olympic City</span></h2>
+            <span class="subtitle"><span class="tag gold" data-i18n="future.visionTag">Future Vision</span> <span data-i18n="future.sub">Every athlete, stadium, coach, competition — one intelligent ecosystem</span></span>
+        </div>
+        <div class="grid-2">
+            <div class="card"><div class="card-header"><i class="fas fa-robot"></i><h3 data-i18n="future.connected">Connected Digital Twins</h3></div><div class="card-body"><div class="stat"><span class="label" data-i18n="future.athletes">Athletes</span><span class="value gold">1,200+</span></div><div class="stat"><span class="label" data-i18n="future.stadiums">Stadiums</span><span class="value">8</span></div><div class="stat"><span class="label" data-i18n="future.halls">Training Halls</span><span class="value">24</span></div><div class="stat"><span class="label" data-i18n="future.coaches">Coaches</span><span class="value cyan">180</span></div><span class="tag" data-i18n="future.decision">national sports decision‑making</span></div></div>
+            <div class="card"><div class="card-header"><i class="fas fa-globe-africa"></i><h3 data-i18n="future.ecosystem">Intelligent Sports Ecosystem</h3></div><div class="card-body"><p style="color:var(--text-secondary);" data-i18n="future.ecosystemDesc">All Digital Twins connected in one platform to support national sports strategy, Olympic preparation, and talent development.</p><span class="tag gold"><i class="fas fa-rocket"></i> <span data-i18n="future.vision2030">Egypt 2030 vision</span></span></div></div>
+        </div>
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <footer class="platform-footer">
+        <div class="signature">
+            <i class="fas fa-signature"></i>
+            <div class="text">
+                <strong>Prof. Dr. Ehab Elbedewy</strong>
+                <span class="title" data-i18n="footer.title">Professor of Sports Sciences</span><br />
+                <span data-i18n="footer.desc">Artificial Intelligence &amp; Digital Twin Researcher &bull; Tanta University &bull; Egypt</span>
+            </div>
+        </div>
+        <div class="vision-badge">
+            <i class="fas fa-city"></i> <span data-i18n="footer.vision">Digital Olympic City</span>
+        </div>
+    </footer>
+
+</div><!-- /main-content -->
+
+<script>
+    (function() {
+        'use strict';
+
+        // ================================================================
+        //  1.  الترجمة (i18n)
+        // ================================================================
+        const translations = {
+            en: {
+                // عام
+                'app.title': 'Digital Twin Sports',
+                'brandSub': 'Digital Twin Platform',
+                'nav.dashboard': 'Dashboard',
+                'nav.twins': 'Digital Twins',
+                'nav.new': 'NEW',
+                'nav.scientist': 'AI Sports Scientist',
+                'nav.coach': 'AI Coach',
+                'nav.health': 'Health Guardian',
+                'nav.injury': 'Injury Prevention',
+                'nav.tactical': 'Tactical Intelligence',
+                'nav.talent': 'Talent ID',
+                'nav.national': 'National Dashboards',
+                'nav.research': 'Research Center',
+                'nav.chat': 'AI Chat',
+                'nav.vr': 'VR & AR',
+                'nav.video': 'Video Analytics',
+                'nav.simulator': 'Competition Sim',
+                'nav.nutrition': 'AI Nutrition',
+                'nav.passport': 'Digital Passport',
+                'nav.olympic': 'Olympic Digital Twin',
+                'nav.xai': 'Explainable AI',
+                'nav.evidence': 'Scientific Evidence',
+                'nav.future': 'Digital Olympic City',
+                'nav.vision': 'Vision',
+
+                // Dashboard
+                'dashboard.title': 'Platform Dashboard',
+                'dashboard.status': 'All systems operational',
+                'dashboard.aiModules': 'AI Modules',
+                'dashboard.aiDesc': 'Active AI engines monitoring performance, health, and tactics in real‑time.',
+                'dashboard.digitalTwins': 'Digital Twins',
+                'dashboard.twinsDesc': 'Athletes, teams, facilities & competitions simulated.',
+                'dashboard.prediction': 'Prediction Accuracy',
+                'dashboard.predDesc': 'Injury risk & performance forecasting confidence.',
+                'dashboard.olympicPotential': 'Olympic Potential',
+                'dashboard.olympicDesc': 'Identified talent pool growth this quarter.',
+                'dashboard.liveStatus': 'Live Athlete Status',
+                'dashboard.fatigue': 'Fatigue Index',
+                'dashboard.recovery': 'Recovery Score',
+                'dashboard.readiness': 'Readiness',
+                'dashboard.injuryRisk': 'Injury Risk',
+                'dashboard.upcoming': 'Upcoming Simulations',
+                'dashboard.sim1': 'Training Load Optimisation',
+                'dashboard.sim2': 'Tactical Opponent Analysis',
+                'dashboard.sim3': 'Heat Adaptation Protocol',
+                'dashboard.sim4': 'Injury Prevention Scan',
+                'dashboard.aiActive': 'AI active',
+                'dashboard.synced': 'synced',
+
+                // Twins
+                'twins.title': 'Digital Twin Laboratory',
+                'twins.new': 'NEW',
+                'twins.sub': 'Simulate unlimited scenarios',
+                'twins.load': 'Training Load Simulation',
+                'twins.currentLoad': 'Current Load',
+                'twins.optimalLoad': 'Optimal Load',
+                'twins.fatigueAcc': 'Fatigue Accumulation',
+                'twins.recStrategy': 'Recovery strategy: active',
+                'twins.prediction': 'prediction: +8% performance',
+                'twins.environment': 'Environmental & Altitude',
+                'twins.altitude': 'Altitude (m)',
+                'twins.temp': 'Temperature (°C)',
+                'twins.humidity': 'Humidity (%)',
+                'twins.heatAdapt': 'Heat Adaptation',
+                'twins.oppStrategy': 'Opponent strategy: high press',
+                'twins.simRunning': 'simulation running',
+                'twins.tactical': 'Tactical & Competition',
+                'twins.formation': 'Formation',
+                'twins.pressing': 'Pressing',
+                'twins.transition': 'Transition',
+                'twins.defense': 'Defense',
+                'twins.counter': 'Counter',
+                'twins.setPieces': 'Set Pieces',
+                'twins.winProb': 'Win Probability',
+                'twins.tactRec': 'AI tactical recommendation ready',
+                'twins.injuryProb': 'Injury Probability',
+                'twins.acl': 'ACL Risk',
+                'twins.hamstring': 'Hamstring',
+                'twins.overuse': 'Overuse',
+                'twins.prevProtocol': 'prevention protocol active',
+
+                // Scientist
+                'scientist.title': 'AI Sports Scientist',
+                'scientist.sub': 'Automatic evaluation & recommendations',
+                'scientist.trainingRecovery': 'Training & Recovery',
+                'scientist.load': 'Training Load',
+                'scientist.recovery': 'Recovery',
+                'scientist.overtraining': 'Overtraining',
+                'scientist.readiness': 'Readiness',
+                'scientist.recLoad': 'Recommendation: reduce load by 10%',
+                'scientist.physio': 'Physiological & Hormonal',
+                'scientist.cortisol': 'Cortisol',
+                'scientist.testosterone': 'Testosterone',
+                'scientist.energy': 'Energy Systems',
+                'scientist.biomech': 'Biomechanics: efficient',
+                'scientist.performance': 'Performance & Plateau',
+                'scientist.adaptation': 'Adaptation',
+                'scientist.plateau': 'Plateau',
+                'scientist.economy': 'Movement Economy',
+                'scientist.neuromuscular': 'neuromuscular readiness: high',
+
+                // Coach
+                'coach.title': 'AI Coach Assistant',
+                'coach.sub': 'Daily → season planning',
+                'coach.daily': 'Daily Training',
+                'coach.warmup': 'Warm-up',
+                'coach.main': 'Main session',
+                'coach.strength': 'Strength',
+                'coach.cooldown': 'Cool-down',
+                'coach.nutrition': 'Nutrition',
+                'coach.ready': 'ready',
+                'coach.weekly': 'Weekly & Season Plan',
+                'coach.volume': 'Weekly volume',
+                'coach.intensity': 'Intensity',
+                'coach.taper': 'Taper',
+                'coach.recoverySessions': 'Recovery sessions',
+                'coach.psych': 'psychological prep: visualisation',
+                'coach.compTaper': 'Competition Taper',
+                'coach.daysToComp': 'Days to comp',
+                'coach.loadReduction': 'Load reduction',
+                'coach.sleepFocus': 'Sleep focus',
+                'coach.aiStrategy': 'AI strategy: peak performance',
+                'coach.hydration': 'Hydration & Nutrition',
+                'coach.fluid': 'Fluid intake',
+                'coach.carbs': 'Carbs',
+                'coach.protein': 'Protein',
+                'coach.supplement': 'supplement: electrolytes + BCAAs',
+
+                // Health
+                'health.title': 'Athlete Health Guardian',
+                'health.sub': 'Continuous monitoring & alerts',
+                'health.cardiovascular': 'Cardiovascular',
+                'health.heartRate': 'Heart Rate',
+                'health.bloodPressure': 'Blood Pressure',
+                'health.stable': 'stable',
+                'health.respiratory': 'Respiratory',
+                'health.respRate': 'Respiratory Rate',
+                'health.normal': 'normal',
+                'health.sleepStress': 'Sleep & Stress',
+                'health.sleep': 'Sleep',
+                'health.stress': 'Stress Index',
+                'health.recovery': 'Recovery',
+                'health.fatigue': 'fatigue: moderate',
+                'health.biomarkers': 'Blood Biomarkers',
+                'health.hemoglobin': 'Hemoglobin',
+                'health.ferritin': 'Ferritin',
+                'health.vitaminD': 'Vitamin D',
+                'health.optimal': 'optimal',
+                'health.riskAlerts': 'Risk Alerts',
+                'health.cardiovascularRisk': 'Cardiovascular',
+                'health.heatExhaustion': 'Heat exhaustion',
+                'health.emergency': 'Emergency',
+                'health.allClear': 'all clear',
+                'health.emergencyNotif': 'Emergency Notifications',
+                'health.noAlerts': 'No active alerts',
+                'health.lastCheck': 'last check: 2 min ago',
+
+                // Injury
+                'injury.title': 'Smart Injury Prevention',
+                'injury.sub': 'Predict & prevent',
+                'injury.aclHamstring': 'ACL / Hamstring',
+                'injury.aclRisk': 'ACL Risk',
+                'injury.hamstringRisk': 'Hamstring',
+                'injury.prevStrengthening': 'prevention: eccentric strengthening',
+                'injury.muscleShoulder': 'Muscle & Shoulder',
+                'injury.muscleStrains': 'Muscle strains',
+                'injury.shoulderInjuries': 'Shoulder injuries',
+                'injury.overuseInjuries': 'Overuse',
+                'injury.rotatorCuff': 'rotator cuff: stable',
+                'injury.heatCardio': 'Heat & Cardiovascular',
+                'injury.heatExhaustionRisk': 'Heat exhaustion',
+                'injury.cardioRisk': 'Cardiovascular risk',
+                'injury.returnToPlay': 'return-to-play readiness: 92%',
+
+                // Tactical
+                'tactical.title': 'Tactical Intelligence',
+                'tactical.sub': 'Opponent analysis & recommendations',
+                'tactical.opponent': 'Opponent Behavior',
+                'tactical.playingStyle': 'Playing style',
+                'tactical.decisionMaking': 'Decision making',
+                'tactical.reactionPatterns': 'Reaction patterns',
+                'tactical.winningStrategy': 'winning strategy: counter‑attack',
+                'tactical.heatMaps': 'Heat & Movement Maps',
+                'tactical.attackPattern': 'attack pattern: left flank',
+                'tactical.recommendations': 'Automatic Recommendations',
+                'tactical.formation': 'Formation',
+                'tactical.pressingTrigger': 'Pressing trigger',
+                'tactical.setPiece': 'Set piece',
+                'tactical.planReady': 'AI tactical plan ready',
+                'tactical.defenseAttack': 'Defense & Attack',
+                'tactical.defensePattern': 'Defense pattern',
+                'tactical.attackPattern': 'Attack pattern',
+                'tactical.winProbability': 'Win probability',
+                'tactical.tacticalRating': 'tactical rating: A-',
+
+                // Talent
+                'talent.title': 'Talent Identification AI',
+                'talent.sub': 'Discover future champions',
+                'talent.prospects': 'Top Prospects',
+                'talent.olympicPotential': 'Olympic potential: high',
+                'talent.bestPosition': 'Best Position',
+                'talent.eliteSimilarity': 'elite similarity: 89%',
+                'talent.potentialRanking': 'Potential Ranking',
+                'talent.nationalRank': 'National rank',
+                'talent.worldRank': 'World rank',
+                'talent.olympicPotentialScore': 'Olympic potential',
+                'talent.recommendedSport': 'recommend sport: football',
+
+                // National
+                'national.title': 'National Team Dashboards',
+                'national.sub': 'Olympic Committee & Federations',
+                'national.olympicCommittee': 'Olympic Committee',
+                'national.footballFederation': 'Football Federation',
+                'national.clubs': 'National Clubs',
+                'national.universities': 'Universities',
+
+                // Research
+                'research.title': 'Research Center',
+                'research.sub': 'Export, analyse, publish',
+                'research.datasets': 'Datasets & Analysis',
+                'research.athletes': 'Athletes',
+                'research.variables': 'Variables',
+                'research.mlModels': 'ML models',
+                'research.export': 'export CSV',
+                'research.apa': 'APA references',
+                'research.reports': 'Scientific Reports',
+                'research.comparative': 'Comparative study',
+                'research.publication': 'Publication',
+
+                // Chat
+                'chat.title': 'AI Chat Assistant',
+                'chat.sub': 'Multilingual sports science Q&A',
+                'chat.conversation': 'Conversation',
+                'chat.you': 'You',
+                'chat.ai': 'AI Assistant',
+                'chat.msg1': 'How to improve recovery after intense training?',
+                'chat.msg2': 'Active recovery, 8h sleep, 1.6g/kg protein, hydration, and cold‑water immersion. Evidence: IOC consensus 2023.',
+                'chat.msg3': 'What about heat adaptation?',
+                'chat.msg4': 'Gradual exposure 90 min/day, 14‑21 days, hydration with electrolytes. PubMed: PMID 34567890.',
+                'chat.voice': 'voice input ready',
+                'chat.language': 'Language & Topics',
+                'chat.topicNutrition': 'Nutrition',
+                'chat.topicRecovery': 'Recovery',
+                'chat.topicBiomechanics': 'Biomechanics',
+                'chat.topicPsychology': 'Psychology',
+                'chat.topicInjury': 'Injury',
+                'chat.topicStatistics': 'Statistics',
+
+                // VR
+                'vr.title': 'VR & AR Training',
+                'vr.sub': 'Immersive simulation',
+                'vr.virtual': 'Virtual Reality',
+                'vr.virtualDesc': '3D training scenarios. Holographic coach available.',
+                'vr.augmented': 'Augmented Reality',
+                'vr.augmentedDesc': 'Real‑time tactical overlay on field.',
+                'vr.mixed': 'Mixed Reality',
+                'vr.mixedDesc': 'Immersive competition simulation.',
+
+                // Video
+                'video.title': 'Intelligent Video Analytics',
+                'video.sub': 'Automatic error detection & correction',
+                'video.movement': 'Movement Quality',
+                'video.jointAngles': 'Joint angles',
+                'video.reactionTime': 'Reaction time',
+                'video.speed': 'Speed',
+                'video.correction': 'correction: arm swing',
+                'video.autoCorrection': 'Automatic Correction',
+                'video.techError': 'Technical error',
+                'video.fix': 'Recommended fix',
+                'video.applied': 'correction applied',
+
+                // Simulator
+                'sim.title': 'Smart Competition Simulator',
+                'sim.sub': 'Pre‑competition prediction',
+                'sim.opponentEnv': 'Opponent & Environment',
+                'sim.opponent': 'Opponent',
+                'sim.weather': 'Weather',
+                'sim.crowd': 'Crowd',
+                'sim.stress': 'psychological stress: moderate',
+                'sim.prediction': 'Prediction',
+                'sim.expectedRank': 'Expected ranking',
+                'sim.winProb': 'Winning probability',
+                'sim.fatigueImpact': 'fatigue impact: -4%',
+
+                // Nutrition
+                'nutrition.title': 'AI Nutrition Engine',
+                'nutrition.sub': 'Daily meals & competition nutrition',
+                'nutrition.daily': 'Daily Plan',
+                'nutrition.calories': 'Calories',
+                'nutrition.carbs': 'Carbs',
+                'nutrition.protein': 'Protein',
+                'nutrition.fat': 'Fat',
+                'nutrition.hydration': 'hydration: 3.2 L',
+                'nutrition.comp': 'Competition Nutrition',
+                'nutrition.preComp': 'Pre‑comp meal',
+                'nutrition.during': 'During',
+                'nutrition.postComp': 'Post‑comp',
+                'nutrition.supplement': 'supplement: creatine',
+
+                // Passport
+                'passport.title': 'Athlete Digital Passport',
+                'passport.sub': 'Complete digital identity',
+                'passport.profile': 'Profile',
+                'passport.name': 'Name',
+                'passport.sport': 'Sport',
+                'passport.age': 'Age',
+                'passport.nationality': 'Nationality',
+                'passport.history': 'Injuries: 2 | Competitions: 47',
+                'passport.achievements': 'Gold medal (2024), MVP',
+                'passport.addAthlete': 'Add New Athlete',
+                'passport.addBtn': 'Add Athlete',
+                'passport.list': 'Athletes List',
+
+                // Olympic
+                'olympic.title': 'Olympic Digital Twin Platform',
+                'olympic.sub': 'Athletes · Teams · Facilities',
+                'olympic.athletes': 'Athletes',
+                'olympic.teams': 'Teams',
+                'olympic.facilities': 'Facilities',
+                'olympic.federations': 'Federations',
+
+                // XAI
+                'xai.title': 'Explainable AI (XAI)',
+                'xai.sub': 'Why? Evidence · Confidence',
+                'xai.explanation': 'Recommendation Explanation',
+                'xai.why': 'Why reduce load?',
+                'xai.evidence': 'Evidence',
+                'xai.confidence': 'Confidence',
+                'xai.predConf': 'prediction confidence: 92%',
+                'xai.references': 'Scientific References',
+
+                // Evidence
+                'evidence.title': 'Scientific Evidence Module',
+                'evidence.sub': 'PubMed · Scopus · IOC · ACSM · NSCA · FIFA',
+                'evidence.pubmed': '24 references cited',
+                'evidence.ioc': '2023 guidelines applied',
+                'evidence.nsca': 'Strength & conditioning evidence',
+
+                // Future
+                'future.title': 'Digital Olympic City',
+                'future.visionTag': 'Future Vision',
+                'future.sub': 'Every athlete, stadium, coach, competition — one intelligent ecosystem',
+                'future.connected': 'Connected Digital Twins',
+                'future.athletes': 'Athletes',
+                'future.stadiums': 'Stadiums',
+                'future.halls': 'Training Halls',
+                'future.coaches': 'Coaches',
+                'future.decision': 'national sports decision‑making',
+                'future.ecosystem': 'Intelligent Sports Ecosystem',
+                'future.ecosystemDesc': 'All Digital Twins connected in one platform to support national sports strategy, Olympic preparation, and talent development.',
+                'future.vision2030': 'Egypt 2030 vision',
+
+                // Footer
+                'footer.title': 'Professor of Sports Sciences',
+                'footer.desc': 'Artificial Intelligence & Digital Twin Researcher • Tanta University • Egypt',
+                'footer.vision': 'Digital Olympic City',
+
+                // Splash
+                'splash.title': 'Digital Twin & AI Sports',
+                'splash.sub': 'Intelligent Sports Science Platform',
+                'splash.profTitle': 'Professor of Sports Sciences',
+                'splash.profDesc': 'Artificial Intelligence & Digital Twin Researcher • Tanta University • Egypt',
+            },
+            ar: {
+                'app.title': 'الرياضة بالتوأمة الرقمية',
+                'brandSub': 'منصة التوأمة الرقمية',
+                'nav.dashboard': 'لوحة التحكم',
+                'nav.twins': 'التوأمة الرقمية',
+                'nav.new': 'جديد',
+                'nav.scientist': 'عالم الرياضة الذكي',
+                'nav.coach': 'المدرب الذكي',
+                'nav.health': 'حارس الصحة',
+                'nav.injury': 'الوقاية من الإصابات',
+                'nav.tactical': 'الذكاء التكتيكي',
+                'nav.talent': 'اكتشاف المواهب',
+                'nav.national': 'لوحات الفرق الوطنية',
+                'nav.research': 'مركز البحوث',
+                'nav.chat': 'المساعد الذكي',
+                'nav.vr': 'الواقع الافتراضي والمعزز',
+                'nav.video': 'تحليل الفيديو',
+                'nav.simulator': 'محاكي المنافسات',
+                'nav.nutrition': 'التغذية الذكية',
+                'nav.passport': 'جواز السفر الرقمي',
+                'nav.olympic': 'التوأمة الأولمبية',
+                'nav.xai': 'الذكاء القابل للتفسير',
+                'nav.evidence': 'الأدلة العلمية',
+                'nav.future': 'المدينة الأولمبية الرقمية',
+                'nav.vision': 'رؤية',
+
+                'dashboard.title': 'لوحة التحكم الرئيسية',
+                'dashboard.status': 'جميع الأنظمة تعمل',
+                'dashboard.aiModules': 'وحدات الذكاء الاصطناعي',
+                'dashboard.aiDesc': 'محركات ذكاء اصطناعي نشطة تراقب الأداء والصحة والتكتيكات في الوقت الفعلي.',
+                'dashboard.digitalTwins': 'التوائم الرقمية',
+                'dashboard.twinsDesc': 'محاكاة الرياضيين والفرق والمنشآت والمنافسات.',
+                'dashboard.prediction': 'دقة التوقع',
+                'dashboard.predDesc': 'ثقة التنبؤ بخطر الإصابة والأداء.',
+                'dashboard.olympicPotential': 'الإمكانات الأولمبية',
+                'dashboard.olympicDesc': 'نمو المواهب المكتشفة هذا الربع.',
+                'dashboard.liveStatus': 'الحالة المباشرة للرياضي',
+                'dashboard.fatigue': 'مؤشر الإجهاد',
+                'dashboard.recovery': 'نقاط الاستشفاء',
+                'dashboard.readiness': 'الجاهزية',
+                'dashboard.injuryRisk': 'خطر الإصابة',
+                'dashboard.upcoming': 'المحاكيات القادمة',
+                'dashboard.sim1': 'تحسين حمل التدريب',
+                'dashboard.sim2': 'تحليل الخصم التكتيكي',
+                'dashboard.sim3': 'بروتوكول التكيف الحراري',
+                'dashboard.sim4': 'فحص الوقاية من الإصابات',
+                'dashboard.aiActive': 'الذكاء الاصطناعي نشط',
+                'dashboard.synced': 'متزامن',
+
+                'twins.title': 'مختبر التوأمة الرقمية',
+                'twins.new': 'جديد',
+                'twins.sub': 'محاكاة سيناريوهات غير محدودة',
+                'twins.load': 'محاكاة حمل التدريب',
+                'twins.currentLoad': 'الحمل الحالي',
+                'twins.optimalLoad': 'الحمل الأمثل',
+                'twins.fatigueAcc': 'تراكم الإجهاد',
+                'twins.recStrategy': 'استراتيجية الاستشفاء: نشطة',
+                'twins.prediction': 'توقع: +8% أداء',
+                'twins.environment': 'البيئة والارتفاع',
+                'twins.altitude': 'الارتفاع (م)',
+                'twins.temp': 'درجة الحرارة (°C)',
+                'twins.humidity': 'الرطوبة (%)',
+                'twins.heatAdapt': 'التكيف الحراري',
+                'twins.oppStrategy': 'استراتيجية الخصم: الضغط العالي',
+                'twins.simRunning': 'المحاكاة قيد التشغيل',
+                'twins.tactical': 'التكتيك والمنافسة',
+                'twins.formation': 'التشكيل',
+                'twins.pressing': 'الضغط',
+                'twins.transition': 'الانتقال',
+                'twins.defense': 'الدفاع',
+                'twins.counter': 'الهجوم المرتد',
+                'twins.setPieces': 'الكرات الثابتة',
+                'twins.winProb': 'احتمالية الفوز',
+                'twins.tactRec': 'توصية تكتيكية من الذكاء الاصطناعي جاهزة',
+                'twins.injuryProb': 'احتمالية الإصابة',
+                'twins.acl': 'خطر الرباط الصليبي',
+                'twins.hamstring': 'أوتار المأبض',
+                'twins.overuse': 'الإفراط في الاستخدام',
+                'twins.prevProtocol': 'بروتوكول الوقاية نشط',
+
+                'scientist.title': 'عالم الرياضة الذكي',
+                'scientist.sub': 'تقييم تلقائي وتوصيات',
+                'scientist.trainingRecovery': 'التدريب والاستشفاء',
+                'scientist.load': 'حمل التدريب',
+                'scientist.recovery': 'الاستشفاء',
+                'scientist.overtraining': 'الإفراط في التدريب',
+                'scientist.readiness': 'الجاهزية',
+                'scientist.recLoad': 'التوصية: تقليل الحمل بنسبة 10%',
+                'scientist.physio': 'الفسيولوجي والهرموني',
+                'scientist.cortisol': 'الكورتيزول',
+                'scientist.testosterone': 'التستوستيرون',
+                'scientist.energy': 'أنظمة الطاقة',
+                'scientist.biomech': 'البيوميكانيك: كفء',
+                'scientist.performance': 'الأداء والهضبة',
+                'scientist.adaptation': 'التكيف',
+                'scientist.plateau': 'الهضبة',
+                'scientist.economy': 'اقتصاد الحركة',
+                'scientist.neuromuscular': 'الجاهزية العصبية العضلية: عالية',
+
+                'coach.title': 'المدرب الذكي',
+                'coach.sub': 'يومي → موسمي',
+                'coach.daily': 'التدريب اليومي',
+                'coach.warmup': 'الإحماء',
+                'coach.main': 'الجلسة الرئيسية',
+                'coach.strength': 'القوة',
+                'coach.cooldown': 'التهدئة',
+                'coach.nutrition': 'التغذية',
+                'coach.ready': 'جاهز',
+                'coach.weekly': 'الخطة الأسبوعية والموسمية',
+                'coach.volume': 'الحجم الأسبوعي',
+                'coach.intensity': 'الشدة',
+                'coach.taper': 'التجهيز للمنافسة',
+                'coach.recoverySessions': 'جلسات الاستشفاء',
+                'coach.psych': 'التحضير النفسي: تصور',
+                'coach.compTaper': 'التجهيز للمنافسة',
+                'coach.daysToComp': 'أيام للمنافسة',
+                'coach.loadReduction': 'تخفيض الحمل',
+                'coach.sleepFocus': 'النوم المستهدف',
+                'coach.aiStrategy': 'استراتيجية الذكاء: أداء ذروة',
+                'coach.hydration': 'الترطيب والتغذية',
+                'coach.fluid': 'السوائل المتناولة',
+                'coach.carbs': 'الكربوهيدرات',
+                'coach.protein': 'البروتين',
+                'coach.supplement': 'المكملات: إلكترولايت + BCAAs',
+
+                'health.title': 'حارس الصحة الرياضي',
+                'health.sub': 'مراقبة مستمرة وتنبيهات',
+                'health.cardiovascular': 'القلب والأوعية',
+                'health.heartRate': 'معدل ضربات القلب',
+                'health.bloodPressure': 'ضغط الدم',
+                'health.stable': 'مستقر',
+                'health.respiratory': 'التنفس',
+                'health.respRate': 'معدل التنفس',
+                'health.normal': 'طبيعي',
+                'health.sleepStress': 'النوم والإجهاد',
+                'health.sleep': 'النوم',
+                'health.stress': 'مؤشر الإجهاد',
+                'health.recovery': 'الاستشفاء',
+                'health.fatigue': 'التعب: متوسط',
+                'health.biomarkers': 'المؤشرات الحيوية',
+                'health.hemoglobin': 'الهيموغلوبين',
+                'health.ferritin': 'الفيريتين',
+                'health.vitaminD': 'فيتامين د',
+                'health.optimal': 'أمثل',
+                'health.riskAlerts': 'تنبيهات المخاطر',
+                'health.cardiovascularRisk': 'القلب والأوعية',
+                'health.heatExhaustion': 'الإجهاد الحراري',
+                'health.emergency': 'حالة طوارئ',
+                'health.allClear': 'الكل آمن',
+                'health.emergencyNotif': 'إشعارات الطوارئ',
+                'health.noAlerts': 'لا توجد تنبيهات نشطة',
+                'health.lastCheck': 'آخر فحص: منذ دقيقتين',
+
+                'injury.title': 'الوقاية الذكية من الإصابات',
+                'injury.sub': 'توقع ومنع',
+                'injury.aclHamstring': 'الرباط الصليبي / أوتار المأبض',
+                'injury.aclRisk': 'خطر الرباط الصليبي',
+                'injury.hamstringRisk': 'أوتار المأبض',
+                'injury.prevStrengthening': 'الوقاية: تقوية اللامركزية',
+                'injury.muscleShoulder': 'العضلات والكتف',
+                'injury.muscleStrains': 'إجهادات العضلات',
+                'injury.shoulderInjuries': 'إصابات الكتف',
+                'injury.overuseInjuries': 'الإفراط في الاستخدام',
+                'injury.rotatorCuff': 'الكفة المدورة: مستقرة',
+                'injury.heatCardio': 'الحرارة والقلب',
+                'injury.heatExhaustionRisk': 'الإجهاد الحراري',
+                'injury.cardioRisk': 'خطر قلبي',
+                'injury.returnToPlay': 'الجاهزية للعودة: 92%',
+
+                'tactical.title': 'الذكاء التكتيكي',
+                'tactical.sub': 'تحليل الخصم وتوصيات',
+                'tactical.opponent': 'سلوك الخصم',
+                'tactical.playingStyle': 'أسلوب اللعب',
+                'tactical.decisionMaking': 'اتخاذ القرار',
+                'tactical.reactionPatterns': 'أنماط رد الفعل',
+                'tactical.winningStrategy': 'استراتيجية الفوز: الهجوم المرتد',
+                'tactical.heatMaps': 'خرائط الحرارة والحركة',
+                'tactical.attackPattern': 'نمط الهجوم: الجهة اليسرى',
+                'tactical.recommendations': 'توصيات تلقائية',
+                'tactical.formation': 'التشكيل',
+                'tactical.pressingTrigger': 'مفتاح الضغط',
+                'tactical.setPiece': 'الكرات الثابتة',
+                'tactical.planReady': 'الخطة التكتيكية جاهزة',
+                'tactical.defenseAttack': 'الدفاع والهجوم',
+                'tactical.defensePattern': 'نمط الدفاع',
+                'tactical.attackPattern': 'نمط الهجوم',
+                'tactical.winProbability': 'احتمالية الفوز',
+                'tactical.tacticalRating': 'التقييم التكتيكي: A-',
+
+                'talent.title': 'اكتشاف المواهب بالذكاء الاصطناعي',
+                'talent.sub': 'اكتشف أبطال المستقبل',
+                'talent.prospects': 'أفضل المواهب',
+                'talent.olympicPotential': 'الإمكانات الأولمبية: عالية',
+                'talent.bestPosition': 'أفضل مركز',
+                'talent.eliteSimilarity': 'التشابه مع النخبة: 89%',
+                'talent.potentialRanking': 'التصنيف المحتمل',
+                'talent.nationalRank': 'الترتيب الوطني',
+                'talent.worldRank': 'الترتيب العالمي',
+                'talent.olympicPotentialScore': 'الإمكانات الأولمبية',
+                'talent.recommendedSport': 'الرياضة الموصى بها: كرة القدم',
+
+                'national.title': 'لوحات الفرق الوطنية',
+                'national.sub': 'اللجنة الأولمبية والاتحادات',
+                'national.olympicCommittee': 'اللجنة الأولمبية',
+                'national.footballFederation': 'اتحاد كرة القدم',
+                'national.clubs': 'الأندية الوطنية',
+                'national.universities': 'الجامعات',
+
+                'research.title': 'مركز البحوث',
+                'research.sub': 'تصدير وتحليل ونشر',
+                'research.datasets': 'مجموعات البيانات والتحليل',
+                'research.athletes': 'الرياضيون',
+                'research.variables': 'المتغيرات',
+                'research.mlModels': 'نماذج تعلم الآلة',
+                'research.export': 'تصدير CSV',
+                'research.apa': 'مراجع APA',
+                'research.reports': 'تقارير علمية',
+                'research.comparative': 'دراسة مقارنة',
+                'research.publication': 'النشر',
+
+                'chat.title': 'المساعد الذكي للمحادثة',
+                'chat.sub': 'أسئلة وأجوبة متعددة اللغات في علوم الرياضة',
+                'chat.conversation': 'المحادثة',
+                'chat.you': 'أنت',
+                'chat.ai': 'المساعد الذكي',
+                'chat.msg1': 'كيف أحسن الاستشفاء بعد التدريب الشاق؟',
+                'chat.msg2': 'استشفاء نشط، نوم 8 ساعات، بروتين 1.6 غ/كغ، ترطيب، وحمامات ثلج. الدليل: إجماع اللجنة الأولمبية 2023.',
+                'chat.msg3': 'ماذا عن التكيف الحراري؟',
+                'chat.msg4': 'تعرض تدريجي 90 دقيقة/يوم لمدة 14-21 يوماً، ترطيب مع إلكترولايت. PubMed: PMID 34567890.',
+                'chat.voice': 'الإدخال الصوتي جاهز',
+                'chat.language': 'اللغة والمواضيع',
+                'chat.topicNutrition': 'التغذية',
+                'chat.topicRecovery': 'الاستشفاء',
+                'chat.topicBiomechanics': 'البيوميكانيك',
+                'chat.topicPsychology': 'علم النفس',
+                'chat.topicInjury': 'الإصابات',
+                'chat.topicStatistics': 'الإحصاء',
+
+                'vr.title': 'التدريب بالواقع الافتراضي والمعزز',
+                'vr.sub': 'محاكاة غامرة',
+                'vr.virtual': 'الواقع الافتراضي',
+                'vr.virtualDesc': 'سيناريوهات تدريب ثلاثية الأبعاد. مدرب هولوغرافي متاح.',
+                'vr.augmented': 'الواقع المعزز',
+                'vr.augmentedDesc': 'تراكب تكتيكي فوري على الملعب.',
+                'vr.mixed': 'الواقع المختلط',
+                'vr.mixedDesc': 'محاكاة منافسة غامرة.',
+
+                'video.title': 'تحليل الفيديو الذكي',
+                'video.sub': 'كشف الأخطاء التلقائي وتصحيحها',
+                'video.movement': 'جودة الحركة',
+                'video.jointAngles': 'زوايا المفاصل',
+                'video.reactionTime': 'زمن رد الفعل',
+                'video.speed': 'السرعة',
+                'video.correction': 'التصحيح: حركة الذراع',
+                'video.autoCorrection': 'التصحيح التلقائي',
+                'video.techError': 'خطأ تقني',
+                'video.fix': 'الإصلاح الموصى به',
+                'video.applied': 'تم تطبيق التصحيح',
+
+                'sim.title': 'محاكي المنافسات الذكي',
+                'sim.sub': 'توقع ما قبل المنافسة',
+                'sim.opponentEnv': 'الخصم والبيئة',
+                'sim.opponent': 'الخصم',
+                'sim.weather': 'الطقس',
+                'sim.crowd': 'الجمهور',
+                'sim.stress': 'الضغط النفسي: متوسط',
+                'sim.prediction': 'التوقع',
+                'sim.expectedRank': 'الترتيب المتوقع',
+                'sim.winProb': 'احتمالية الفوز',
+                'sim.fatigueImpact': 'تأثير الإجهاد: -4%',
+
+                'nutrition.title': 'محرك التغذية بالذكاء الاصطناعي',
+                'nutrition.sub': 'وجبات يومية وتغذية المنافسات',
+                'nutrition.daily': 'الخطة اليومية',
+                'nutrition.calories': 'السعرات الحرارية',
+                'nutrition.carbs': 'الكربوهيدرات',
+                'nutrition.protein': 'البروتين',
+                'nutrition.fat': 'الدهون',
+                'nutrition.hydration': 'الترطيب: 3.2 لتر',
+                'nutrition.comp': 'تغذية المنافسة',
+                'nutrition.preComp': 'وجبة ما قبل المنافسة',
+                'nutrition.during': 'أثناء المنافسة',
+                'nutrition.postComp': 'ما بعد المنافسة',
+                'nutrition.supplement': 'المكملات: كرياتين',
+
+                'passport.title': 'جواز السفر الرقمي للرياضي',
+                'passport.sub': 'هوية رقمية شاملة',
+                'passport.profile': 'الملف الشخصي',
+                'passport.name': 'الاسم',
+                'passport.sport': 'الرياضة',
+                'passport.age': 'العمر',
+                'passport.nationality': 'الجنسية',
+                'passport.history': 'الإصابات: 2 | المنافسات: 47',
+                'passport.achievements': 'الميدالية الذهبية (2024)، أفضل لاعب',
+                'passport.addAthlete': 'إضافة رياضي جديد',
+                'passport.addBtn': 'إضافة رياضي',
+                'passport.list': 'قائمة الرياضيين',
+
+                'olympic.title': 'منصة التوأمة الرقمية الأولمبية',
+                'olympic.sub': 'رياضيون · فرق · منشآت',
+                'olympic.athletes': 'الرياضيون',
+                'olympic.teams': 'الفرق',
+                'olympic.facilities': 'المنشآت',
+                'olympic.federations': 'الاتحادات',
+
+                'xai.title': 'الذكاء الاصطناعي القابل للتفسير',
+                'xai.sub': 'لماذا؟ الدليل · الثقة',
+                'xai.explanation': 'تفسير التوصية',
+                'xai.why': 'لماذا تقليل الحمل؟',
+                'xai.evidence': 'الدليل',
+                'xai.confidence': 'درجة الثقة',
+                'xai.predConf': 'ثقة التوقع: 92%',
+                'xai.references': 'المراجع العلمية',
+
+                'evidence.title': 'وحدة الأدلة العلمية',
+                'evidence.sub': 'PubMed · Scopus · IOC · ACSM · NSCA · FIFA',
+                'evidence.pubmed': '24 مرجعاً مستشهداً',
+                'evidence.ioc': 'تم تطبيق إرشادات 2023',
+                'evidence.nsca': 'أدلة القوة والتكييف',
+
+                'future.title': 'المدينة الأولمبية الرقمية',
+                'future.visionTag': 'رؤية مستقبلية',
+                'future.sub': 'كل رياضي، ملعب، مدرب، منافسة — نظام بيئي ذكي واحد',
+                'future.connected': 'توائم رقمية متصلة',
+                'future.athletes': 'الرياضيون',
+                'future.stadiums': 'الملاعب',
+                'future.halls': 'قاعات التدريب',
+                'future.coaches': 'المدربون',
+                'future.decision': 'دعم القرار الرياضي الوطني',
+                'future.ecosystem': 'النظام البيئي الرياضي الذكي',
+                'future.ecosystemDesc': 'جميع التوائم الرقمية متصلة في منصة واحدة لدعم الاستراتيجية الرياضية الوطنية، والإعداد الأولمبي، وتطوير المواهب.',
+                'future.vision2030': 'رؤية مصر 2030',
+
+                'footer.title': 'أستاذ علوم الرياضة',
+                'footer.desc': 'باحث في الذكاء الاصطناعي والتوأمة الرقمية • جامعة طنطا • مصر',
+                'footer.vision': 'المدينة الأولمبية الرقمية',
+
+                'splash.title': 'التوأمة الرقمية والرياضة بالذكاء الاصطناعي',
+                'splash.sub': 'منصة علوم الرياضة الذكية',
+                'splash.profTitle': 'أستاذ علوم الرياضة',
+                'splash.profDesc': 'باحث في الذكاء الاصطناعي والتوأمة الرقمية • جامعة طنطا • مصر',
+            }
+        };
+
+        let currentLang = 'en';
+
+        // ================================================================
+        //  2.  وظائف الترجمة
+        // ================================================================
+        function t(key) {
+            return translations[currentLang]?.[key] || key;
+        }
+
+        function updateLanguage() {
+            // تحديث كل العناصر التي تحمل data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = t(key);
+                if (text) {
+                    // إذا كان العنصر input أو placeholder
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = text;
+                    } else {
+                        el.textContent = text;
+                    }
+                }
+            });
+
+            // تحديث شاشة البداية
+            document.getElementById('splashTitle').textContent = t('splash.title');
+            document.getElementById('splashSub').textContent = t('splash.sub');
+            document.getElementById('splashProfTitle').textContent = t('splash.profTitle');
+            document.getElementById('splashProfDesc').textContent = t('splash.profDesc');
+
+            // تحديث زر اللغة
+            document.getElementById('langLabel').textContent = currentLang === 'en' ? 'English' : 'العربية';
+
+            // تحديث اتجاه الصفحة
+            document.body.classList.toggle('rtl', currentLang === 'ar');
+            document.querySelector('.main-content').style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+            // تحديث النماذج والرسائل (مثل الأزرار)
+            // (تم تغطيتها بواسطة data-i18n)
+        }
+
+        // ================================================================
+        //  3.  إدارة الرياضيين (بيانات ديناميكية)
+        // ================================================================
+        let athletes = [
+            { name: 'Ahmed K.', sport: 'Football', age: 22, nationality: 'Egypt' },
+            { name: 'Layla M.', sport: 'Basketball', age: 24, nationality: 'Egypt' },
+            { name: 'Omar H.', sport: 'Athletics', age: 20, nationality: 'Egypt' },
+        ];
+
+        function renderAthleteList() {
+            const container = document.getElementById('athleteList');
+            if (!container) return;
+            container.innerHTML = '';
+            athletes.forEach((a, index) => {
+                const div = document.createElement('div');
+                div.className = 'athlete-item';
+                div.innerHTML = `
+                    <span class="name">${a.name}</span>
+                    <span class="info">${a.sport} • ${a.age} • ${a.nationality}</span>
+                `;
+                container.appendChild(div);
+            });
+            // تحديث أول رياضي في البطاقة الجانبية (للعرض)
+            if (athletes.length > 0) {
+                const first = athletes[0];
+                document.getElementById('dispName').textContent = first.name;
+                document.getElementById('dispSport').textContent = first.sport;
+                document.getElementById('dispAge').textContent = first.age;
+                document.getElementById('dispNationality').textContent = first.nationality;
+            }
+        }
+
+        // ================================================================
+        //  4.  نموذج إضافة رياضي
+        // ================================================================
+        document.getElementById('athleteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('athleteName').value.trim();
+            const sport = document.getElementById('athleteSport').value;
+            const age = parseInt(document.getElementById('athleteAge').value);
+            const nationality = document.getElementById('athleteNationality').value.trim();
+            if (!name || !age || !nationality) {
+                alert(t('passport.addAlert') || 'يرجى ملء جميع الحقول.');
+                return;
+            }
+            athletes.push({ name, sport, age, nationality });
+            renderAthleteList();
+            this.reset();
+            // رسالة تأكيد مترجمة
+            const msg = currentLang === 'ar' ? 'تم إضافة الرياضي بنجاح!' : 'Athlete added successfully!';
+            alert(msg);
+        });
+
+        // ================================================================
+        //  5.  تشغيل اللغة وتهيئة الصفحة
+        // ================================================================
+        document.getElementById('langToggle').addEventListener('click', function() {
+            currentLang = (currentLang === 'en') ? 'ar' : 'en';
+            updateLanguage();
+            // إعادة عرض قائمة الرياضيين (لأن بعض النصوص قد تتغير)
+            renderAthleteList();
+        });
+
+        // تهيئة عرض الرياضيين
+        renderAthleteList();
+
+        // ================================================================
+        //  6.  الساعة
+        // ================================================================
+        function updateDateTime() {
+            const el = document.getElementById('datetimeDisplay');
+            if (!el) return;
+            const now = new Date();
+            const opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute: '2-digit' };
+            el.innerHTML = `<i class="far fa-clock"></i> ${now.toLocaleDateString('en-US', opts)}`;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 30000);
+
+        // ================================================================
+        //  7.  التنقل بين الوحدات
+        // ================================================================
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('.module-section');
+
+        function activateSection(sectionId) {
+            sections.forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById('section-' + sectionId);
+            if (target) target.classList.add('active');
+            navLinks.forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.sidebar-nav a[data-section="${sectionId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                if (section) activateSection(section);
+            });
+        });
+
+        // ================================================================
+        //  8.  إخفاء شاشة البداية
+        // ================================================================
+        setTimeout(() => {
+            document.getElementById('splash').classList.add('hidden');
+        }, 1800);
+
+        // ================================================================
+        //  9.  أزرار الذكاء الاصطناعي (محاكاة)
+        // ================================================================
+        document.querySelectorAll('.btn-ai, .btn-ai-outline').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const msg = currentLang === 'ar' ? '🧠 تم تشغيل تحليل الذكاء الاصطناعي (محاكاة)' : '🧠 AI analysis triggered (simulated)';
+                alert(msg);
+            });
+        });
+
+        console.log('✅ Platform loaded with real‑time athlete management and full i18n.');
+        console.log('© Prof. Dr. Ehab Elbedewy, Tanta University, Egypt');
+    })();
+</script>
+
+</body>
