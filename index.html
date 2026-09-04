@@ -1840,5 +1840,511 @@
         console.log('© Prof. Dr. Ehab Elbedewy, Tanta University, Egypt');
     })();
 </script>
+<script id="conferenceDemoPatch">
+(function(){
+"use strict";
+const A={
+"Alex Morgan Jr.":{country:"USA",event:"100m Sprint",age:23,level:"Elite",height:181,weight:76,s100:10.18,s30:3.92,vj:78,vo2:61.4,react:168,power:1245,sleep:8.1,rhr:48,hrv:78,load:420,recovery:91,readiness:86,risk:18,performance:91,strength:"Explosive Power",priority:"Maximum Velocity"},
+"Daniel Okoro":{country:"Nigeria",event:"100m Sprint",age:19,level:"Developing",height:178,weight:70,s100:10.72,s30:4.08,vj:66,vo2:55.8,react:181,power:1080,sleep:7.2,rhr:55,hrv:61,load:350,recovery:78,readiness:74,risk:27,performance:76,strength:"Acceleration Potential",priority:"Sprint Technique"},
+"Lucas Ferreira":{country:"Brazil",event:"100m Sprint",age:25,level:"Elite",height:183,weight:81,s100:10.24,s30:3.95,vj:74,vo2:59.7,react:171,power:1210,sleep:5.9,rhr:62,hrv:42,load:610,recovery:58,readiness:52,risk:67,performance:79,strength:"Acceleration",priority:"Recovery / Load Management"}
+};
 
+let athlete="Lucas Ferreira",adj=0;
+
+function $(s){return document.querySelector(s)}
+
+function calc(){
+ const b=A[athlete],d=adj/100;
+ let recovery=b.recovery-d*55;
+ let readiness=b.readiness-d*45;
+ let risk=b.risk+d*65;
+ let performance=b.performance-d*18;
+
+ if(adj<0){
+   let x=-adj;
+   recovery=b.recovery+Math.min(12,x*.55);
+   readiness=b.readiness+Math.min(10,x*.45);
+   risk=b.risk-Math.min(20,x*.65);
+   performance=b.performance+Math.min(4,x*.20);
+ }
+
+ return{
+   performance:Math.round(Math.max(0,Math.min(100,performance))),
+   recovery:Math.round(Math.max(0,Math.min(100,recovery))),
+   readiness:Math.round(Math.max(0,Math.min(100,readiness))),
+   risk:Math.round(Math.max(0,Math.min(100,risk)))
+ };
+}
+
+function style(){
+ const css=`
+#ctDemo{
+ font-family:inherit;
+ margin:18px 0;
+ padding:18px;
+ border:1px solid rgba(34,211,238,.35);
+ border-radius:18px;
+ background:linear-gradient(145deg,rgba(2,6,23,.98),rgba(15,23,42,.92));
+ box-shadow:0 14px 35px rgba(0,0,0,.2);
+ color:#e8edf5
+}
+#ctDemo *{box-sizing:border-box}
+#ctDemo .ctBanner{
+ padding:9px 12px;
+ border:1px solid #f7c948;
+ border-radius:10px;
+ background:rgba(247,201,72,.08);
+ margin-bottom:14px;
+ font-size:.78rem
+}
+#ctDemo .ctGrid{
+ display:grid;
+ grid-template-columns:1.1fr .9fr;
+ gap:12px
+}
+#ctDemo .ctCard{
+ padding:14px;
+ border:1px solid rgba(255,255,255,.1);
+ border-radius:14px;
+ background:rgba(255,255,255,.045)
+}
+#ctDemo h2{font-size:1.3rem;margin:0 0 5px}
+#ctDemo h3{font-size:.95rem;margin:0 0 10px}
+#ctDemo .muted{opacity:.72;font-size:.78rem}
+#ctDemo select,
+#ctDemo input{
+ width:100%;
+ margin-top:6px;
+ padding:9px;
+ border-radius:9px;
+ border:1px solid rgba(255,255,255,.15);
+ background:#0f172a;
+ color:#fff
+}
+#ctDemo .actions{
+ display:flex;
+ gap:7px;
+ flex-wrap:wrap;
+ margin-top:10px
+}
+#ctDemo button{
+ cursor:pointer;
+ border:0;
+ border-radius:9px;
+ padding:9px 12px;
+ font-weight:750;
+ background:#fff;
+ color:#0f172a
+}
+#ctDemo button.alt{
+ background:rgba(255,255,255,.08);
+ color:#fff;
+ border:1px solid rgba(255,255,255,.15)
+}
+#ctDemo .kpis{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin-top:12px
+}
+#ctDemo .k{
+ padding:11px;
+ border-radius:11px;
+ background:rgba(255,255,255,.055);
+ border:1px solid rgba(255,255,255,.08)
+}
+#ctDemo .k small{
+ display:block;
+ opacity:.65;
+ font-size:.68rem
+}
+#ctDemo .num{
+ font-size:1.35rem;
+ font-weight:850;
+ margin-top:3px
+}
+#ctDemo .ctBars{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ align-items:end;
+ height:190px;
+ margin-top:12px
+}
+#ctDemo .barCol{
+ display:flex;
+ flex-direction:column;
+ justify-content:end;
+ height:100%;
+ text-align:center
+}
+#ctDemo .barTrack{
+ height:145px;
+ display:flex;
+ align-items:end;
+ justify-content:center
+}
+#ctDemo .bar{
+ width:52px;
+ max-width:80%;
+ border-radius:8px 8px 2px 2px;
+ min-height:4px;
+ transition:height .45s
+}
+#ctDemo .pv{background:#3b82f6}
+#ctDemo .rv{background:#22c55e}
+#ctDemo .rd{background:#f59e0b}
+#ctDemo .rk{background:#ef4444}
+#ctDemo .barVal{
+ font-weight:800;
+ font-size:.82rem;
+ margin-bottom:4px
+}
+#ctDemo .barLbl{
+ font-size:.7rem;
+ opacity:.8;
+ margin-top:5px
+}
+#ctDemo .factor{
+ padding:8px 9px;
+ border-radius:8px;
+ background:rgba(255,255,255,.05);
+ margin:6px 0;
+ font-size:.77rem
+}
+#ctDemo .decision{
+ padding:11px;
+ border-radius:10px;
+ background:rgba(34,211,238,.08);
+ border:1px solid rgba(34,211,238,.2);
+ font-weight:750
+}
+#ctDemo .ctFlow{
+ display:flex;
+ flex-wrap:wrap;
+ gap:6px;
+ margin:10px 0
+}
+#ctDemo .ctStep{
+ padding:6px 9px;
+ border-radius:999px;
+ background:rgba(255,255,255,.06);
+ font-size:.7rem
+}
+#ctDemo .ctFoot{
+ margin-top:12px;
+ font-size:.7rem;
+ opacity:.62
+}
+@media(max-width:850px){
+ #ctDemo .ctGrid{grid-template-columns:1fr}
+ #ctDemo .kpis{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:520px){
+ #ctDemo .kpis{grid-template-columns:1fr 1fr!important}
+ #ctDemo .ctBars{gap:5px}
+ #ctDemo .bar{width:38px}
+}`;
+
+ const s=document.createElement("style");
+ s.textContent=css;
+ document.head.appendChild(s);
+}
+
+function html(){
+ const wrap=document.createElement("section");
+ wrap.id="ctDemo";
+ wrap.setAttribute("aria-label","Conference Demonstration Center");
+
+ wrap.innerHTML=`
+<div class="ctBanner">
+ <strong>SYNTHETIC DATA — CONFERENCE DEMONSTRATION ONLY</strong>
+ <span> | Illustrative rule-based outputs; not a clinical diagnosis or individualized prescription.</span>
+</div>
+
+<h2>Smart Simulation Center — Digital Twin & AI Sports</h2>
+
+<div class="muted">
+Interactive conference workflow:
+Athlete → Risk Signal → Explain → AI Coach → What-if → Reassess
+</div>
+
+<div class="ctFlow">
+ <span class="ctStep">01 Athlete</span>
+ <span class="ctStep">02 Risk Signal</span>
+ <span class="ctStep">03 Explain</span>
+ <span class="ctStep">04 AI Coach</span>
+ <span class="ctStep">05 What-if</span>
+ <span class="ctStep">06 Reassess</span>
+</div>
+
+<div class="ctGrid">
+
+<div class="ctCard">
+ <h3>Athlete Selection</h3>
+
+ <label class="muted">Synthetic athlete</label>
+
+ <select id="ctAthlete">
+  <option>Alex Morgan Jr.</option>
+  <option>Daniel Okoro</option>
+  <option>Lucas Ferreira</option>
+ </select>
+
+ <div id="ctProfile" class="factor"></div>
+
+ <label class="muted">
+ Training-load adjustment:
+ <b id="ctAdj">0%</b>
+ </label>
+
+ <input id="ctRange" type="range" min="-30" max="30" value="0">
+
+ <div class="actions">
+  <button id="ctAnalyze">Run AI Analysis</button>
+  <button class="alt" id="ctWhat">Digital Twin: Reduce Load 15%</button>
+  <button class="alt" id="ctReset">Reset Baseline</button>
+ </div>
+</div>
+
+<div class="ctCard">
+ <h3>AI Coach Decision</h3>
+
+ <div id="ctDecision" class="decision">
+ Run the baseline analysis.
+ </div>
+
+ <div id="ctReason" class="factor">
+ The system will explain the main drivers behind the recommendation.
+ </div>
+</div>
+
+</div>
+
+<div class="kpis">
+
+<div class="k">
+ <small>PERFORMANCE</small>
+ <div class="num" id="ctP">—</div>
+</div>
+
+<div class="k">
+ <small>RECOVERY</small>
+ <div class="num" id="ctR">—</div>
+</div>
+
+<div class="k">
+ <small>READINESS</small>
+ <div class="num" id="ctRd">—</div>
+</div>
+
+<div class="k">
+ <small>INJURY RISK</small>
+ <div class="num" id="ctRisk">—</div>
+</div>
+
+</div>
+
+<div class="ctGrid" style="margin-top:12px">
+
+<div class="ctCard">
+ <h3>Visual KPI Comparison</h3>
+
+ <div class="muted">
+ Each metric uses a distinct semantic color.
+ </div>
+
+ <div class="ctBars">
+
+ <div class="barCol">
+  <div class="barVal" id="bpv">—</div>
+  <div class="barTrack">
+   <div class="bar pv" id="bp"></div>
+  </div>
+  <div class="barLbl">Performance</div>
+ </div>
+
+ <div class="barCol">
+  <div class="barVal" id="brv">—</div>
+  <div class="barTrack">
+   <div class="bar rv" id="br"></div>
+  </div>
+  <div class="barLbl">Recovery</div>
+ </div>
+
+ <div class="barCol">
+  <div class="barVal" id="brdv">—</div>
+  <div class="barTrack">
+   <div class="bar rd" id="brd"></div>
+  </div>
+  <div class="barLbl">Readiness</div>
+ </div>
+
+ <div class="barCol">
+  <div class="barVal" id="bkv">—</div>
+  <div class="barTrack">
+   <div class="bar rk" id="bk"></div>
+  </div>
+  <div class="barLbl">Injury Risk</div>
+ </div>
+
+ </div>
+</div>
+
+<div class="ctCard">
+ <h3>Explainable AI — Why?</h3>
+ <div id="ctFactors"></div>
+ <div id="ctAction" class="decision" style="margin-top:8px">
+ Awaiting analysis…
+ </div>
+</div>
+
+</div>
+
+<div class="ctCard" style="margin-top:12px">
+
+<h3>Digital Twin What-if Result</h3>
+
+<div id="ctTwin" class="factor">
+ Select an athlete and run a scenario.
+ A lower training load should generally improve recovery/readiness
+ in this demonstration while reducing modeled risk.
+</div>
+
+</div>
+
+<div class="ctFoot">
+ Conference demonstration • Synthetic data • Rule-based simulation •
+ Results are illustrative and should not be used for medical,
+ diagnostic, or individualized training decisions.
+</div>
+`;
+
+ const main=document.querySelector(".main-content")||document.body;
+ main.prepend(wrap);
+}
+
+function profile(){
+ const b=A[athlete];
+
+ $("#ctProfile").innerHTML=
+ `<b>${athlete}</b> · ${b.country} · ${b.event} · Age ${b.age} · ${b.level}<br>
+ 100m ${b.s100}s · 30m ${b.s30}s · VJ ${b.vj}cm · VO₂max ${b.vo2}<br>
+ Sleep ${b.sleep}h · HRV ${b.hrv}ms · Training Load ${b.load} AU`;
+}
+
+function paint(x){
+
+ $("#ctP").textContent=x.performance+"/100";
+ $("#ctR").textContent=x.recovery+"%";
+ $("#ctRd").textContent=x.readiness+"%";
+ $("#ctRisk").textContent=x.risk+"%";
+
+ [
+  ["bp","bpv",x.performance],
+  ["br","brv",x.recovery],
+  ["brd","brdv",x.readiness],
+  ["bk","bkv",x.risk]
+ ].forEach(z=>{
+  $("#"+z[0]).style.height=z[2]+"%";
+  $("#"+z[1]).textContent=z[2]+"%";
+ });
+}
+
+function analyze(){
+
+ const b=A[athlete];
+ const x=calc();
+
+ paint(x);
+
+ let f=[];
+
+ if(b.sleep<7)
+  f.push("Sleep duration is below 7 h in the synthetic profile.");
+
+ if(b.hrv<50)
+  f.push("HRV is low relative to the demonstration reference range.");
+
+ if(b.load>550)
+  f.push("Training load is high in this scenario.");
+
+ if(b.risk>=50)
+  f.push("Baseline modeled injury risk is elevated.");
+
+ if(!f.length)
+  f.push("Recovery, readiness and load indicators are comparatively favorable.");
+
+ $("#ctFactors").innerHTML=
+ f.map(v=>`<div class="factor">• ${v}</div>`).join("");
+
+ let action=
+ x.risk>=50||x.readiness<60
+ ?"Reduce load and prioritize recovery before high-intensity exposure."
+ :x.risk>=30||x.readiness<75
+ ?"Use a controlled load with additional recovery monitoring."
+ :"Proceed with planned training while monitoring recovery.";
+
+ $("#ctAction").textContent=action;
+ $("#ctDecision").textContent=action;
+
+ $("#ctReason").textContent=
+ `Explainable drivers: sleep ${b.sleep} h, HRV ${b.hrv} ms,
+ load ${b.load} AU, baseline risk ${b.risk}%.`;
+
+ $("#ctTwin").textContent=
+ adj===0
+ ?"Baseline established. Run the -15% Digital Twin scenario to demonstrate reassessment."
+ :`Scenario at ${adj}% load: Performance ${x.performance},
+ Recovery ${x.recovery}%, Readiness ${x.readiness}%,
+ Injury Risk ${x.risk}%.`;
+}
+
+function events(){
+
+ $("#ctAthlete").onchange=e=>{
+  athlete=e.target.value;
+  adj=0;
+  $("#ctRange").value=0;
+  $("#ctAdj").textContent="0%";
+  profile();
+  analyze();
+ };
+
+ $("#ctRange").oninput=e=>{
+  adj=+e.target.value;
+  $("#ctAdj").textContent=(adj>0?"+":"")+adj+"%";
+  analyze();
+ };
+
+ $("#ctAnalyze").onclick=()=>{
+  adj=0;
+  $("#ctRange").value=0;
+  $("#ctAdj").textContent="0%";
+  analyze();
+ };
+
+ $("#ctWhat").onclick=()=>{
+  adj=-15;
+  $("#ctRange").value=-15;
+  $("#ctAdj").textContent="-15%";
+  analyze();
+ };
+
+ $("#ctReset").onclick=()=>{
+  adj=0;
+  $("#ctRange").value=0;
+  $("#ctAdj").textContent="0%";
+  analyze();
+ };
+}
+
+style();
+html();
+profile();
+events();
+analyze();
+
+})();
+</script>
 </body>
