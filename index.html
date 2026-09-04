@@ -2347,4 +2347,675 @@ analyze();
 
 })();
 </script>
+<!-- =========================================================
+     ACADEMIC INTEGRITY LAYER
+     Digital Twin & AI Sports — Conference Edition
+     Synthetic / Illustrative / Evidence / Future labels
+     ========================================================= -->
+
+<style>
+  .academic-integrity-layer{
+    margin:18px 0 26px;
+    padding:18px 20px;
+    border:1px solid rgba(59,130,246,.25);
+    border-radius:16px;
+    background:linear-gradient(135deg,#f8fbff,#ffffff);
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    font-family:inherit;
+  }
+  .academic-integrity-layer .ai-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:6px;
+  }
+  .academic-integrity-layer .ai-sub{
+    font-size:13px;
+    opacity:.78;
+    margin-bottom:14px;
+  }
+  .academic-integrity-layer .ai-banner{
+    padding:12px 14px;
+    border-radius:10px;
+    background:#eef6ff;
+    border-left:4px solid #3b82f6;
+    margin-bottom:14px;
+    font-size:13px;
+    line-height:1.55;
+  }
+  .academic-integrity-layer .ai-legend{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:8px;
+  }
+  .academic-integrity-layer .ai-tag{
+    padding:9px 10px;
+    border-radius:9px;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    font-size:11px;
+    line-height:1.35;
+  }
+  .academic-integrity-layer .ai-tag strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:3px;
+  }
+  .academic-integrity-layer .ai-note{
+    margin-top:12px;
+    font-size:11px;
+    opacity:.72;
+    line-height:1.5;
+  }
+  @media(max-width:900px){
+    .academic-integrity-layer .ai-legend{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+  }
+  @media(max-width:500px){
+    .academic-integrity-layer .ai-legend{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* Labels inserted beside sensitive outputs */
+  .academic-integrity-label{
+    display:inline-block;
+    margin:4px 0;
+    padding:3px 7px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.15px;
+    background:#f3f4f6;
+    border:1px solid #e5e7eb;
+  }
+
+  .academic-integrity-warning{
+    margin:10px 0;
+    padding:10px 12px;
+    border-radius:9px;
+    background:#fff7ed;
+    border-left:4px solid #f59e0b;
+    font-size:11px;
+    line-height:1.5;
+  }
+
+  .academic-evidence-note{
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:9px;
+    background:#f0fdf4;
+    border-left:4px solid #22c55e;
+    font-size:11px;
+    line-height:1.5;
+  }
+</style>
+
+<script>
+(function(){
+
+  /* ---------- Utility ---------- */
+  function addClass(el, cls){
+    if(el && !el.classList.contains(cls)) el.classList.add(cls);
+  }
+
+  function addLabelAfterText(searchText, labelText){
+    const walker=document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT
+    );
+
+    let node;
+    while(node=walker.nextNode()){
+      if(!node.parentElement) continue;
+      if(node.parentElement.closest('.academic-integrity-layer')) continue;
+
+      if(node.nodeValue && node.nodeValue.includes(searchText)){
+        const parent=node.parentElement;
+
+        if(parent.querySelector('.academic-integrity-label')) return true;
+
+        const label=document.createElement('span');
+        label.className='academic-integrity-label';
+        label.textContent=labelText;
+
+        parent.appendChild(document.createTextNode(' '));
+        parent.appendChild(label);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function replaceVisibleText(oldText,newText){
+    const walker=document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT
+    );
+
+    let node;
+    while(node=walker.nextNode()){
+      if(!node.parentElement) continue;
+      if(node.parentElement.closest('script,style')) continue;
+
+      if(node.nodeValue && node.nodeValue.includes(oldText)){
+        node.nodeValue=node.nodeValue.replaceAll(oldText,newText);
+      }
+    }
+  }
+
+  /* ---------- Global Academic Integrity Panel ---------- */
+  function createIntegrityPanel(){
+
+    if(document.getElementById('academic-integrity-panel')) return;
+
+    const main =
+      document.querySelector('.main-content') ||
+      document.querySelector('main') ||
+      document.body;
+
+    const panel=document.createElement('section');
+    panel.id='academic-integrity-panel';
+    panel.className='academic-integrity-layer';
+
+    panel.innerHTML=`
+      <div class="ai-title">
+        Academic Integrity & Demonstration Framework
+      </div>
+
+      <div class="ai-sub">
+        إطار النزاهة الأكاديمية والعرض التجريبي
+      </div>
+
+      <div class="ai-banner">
+        <strong>🧪 SYNTHETIC DATA — CONFERENCE DEMONSTRATION ONLY</strong><br>
+        The interactive outputs presented in this platform are synthetic,
+        illustrative or simulated unless explicitly identified as verified
+        scientific evidence. They are designed to demonstrate an AI-driven
+        Digital Twin decision-support workflow and are not clinical diagnoses,
+        validated medical predictions, or official national statistics.
+      </div>
+
+      <div class="ai-legend">
+        <div class="ai-tag">
+          <strong>🧪 Synthetic Demonstration</strong>
+          بيانات اصطناعية — عرض تجريبي
+        </div>
+
+        <div class="ai-tag">
+          <strong>📊 Illustrative Output</strong>
+          مخرج توضيحي
+        </div>
+
+        <div class="ai-tag">
+          <strong>🔬 Verified Evidence</strong>
+          دليل علمي موثق
+        </div>
+
+        <div class="ai-tag">
+          <strong>🧠 AI Decision Support</strong>
+          دعم قرار بالذكاء الاصطناعي
+        </div>
+
+        <div class="ai-tag">
+          <strong>🔮 Future Architecture</strong>
+          بنية مستقبلية مفاهيمية
+        </div>
+      </div>
+
+      <div class="ai-note">
+        Academic note: simulated scores, probabilities and physiological
+        values should not be interpreted as clinically validated predictions,
+        medical assessments, or prescriptions.
+      </div>
+    `;
+
+    main.insertBefore(panel,main.firstChild);
+  }
+
+  /* ---------- Rename potentially misleading labels ---------- */
+  function academicRenaming(){
+
+    replaceVisibleText(
+      'Prediction Accuracy',
+      'Illustrative Prediction Confidence'
+    );
+
+    replaceVisibleText(
+      'Olympic Potential',
+      'Illustrative Potential Indicator'
+    );
+
+    replaceVisibleText(
+      'Win Probability',
+      'Simulated Scenario Outcome'
+    );
+
+    replaceVisibleText(
+      'Winning probability',
+      'Simulated Outcome Probability'
+    );
+
+    replaceVisibleText(
+      'Pre-competition prediction',
+      'Pre-competition Scenario Simulation'
+    );
+
+    replaceVisibleText(
+      'Pre-competition prediction',
+      'Pre-competition Scenario Simulation'
+    );
+
+    replaceVisibleText(
+      'Talent Identification AI',
+      'Illustrative Talent Profile — AI'
+    );
+
+    replaceVisibleText(
+      'Automatic Correction',
+      'Suggested Correction'
+    );
+
+    replaceVisibleText(
+      'correction applied',
+      'suggested correction'
+    );
+
+    replaceVisibleText(
+      'Complete digital identity',
+      'Synthetic Athlete Digital Identity'
+    );
+
+    replaceVisibleText(
+      'Discover future champions',
+      'Explore illustrative athlete profiles'
+    );
+
+    replaceVisibleText(
+      'Research Center',
+      'Research Center & Evidence'
+    );
+  }
+
+  /* ---------- Sensitive output labels ---------- */
+  function addIntegrityLabels(){
+
+    addLabelAfterText(
+      'ACL Risk 14%',
+      '📊 Modeled / Illustrative Indicator'
+    );
+
+    addLabelAfterText(
+      'Hamstring 27%',
+      '📊 Modeled / Illustrative Indicator'
+    );
+
+    addLabelAfterText(
+      'Overuse 8%',
+      '📊 Modeled / Illustrative Indicator'
+    );
+
+    addLabelAfterText(
+      'Win Probability 63%',
+      '🧪 Simulated Output'
+    );
+
+    addLabelAfterText(
+      'Win probability 67%',
+      '🧪 Simulated Output'
+    );
+
+    addLabelAfterText(
+      'Winning probability 71%',
+      '🧪 Simulated Output'
+    );
+
+    addLabelAfterText(
+      'Ahmed K.98%',
+      '📊 Illustrative Score'
+    );
+
+    addLabelAfterText(
+      'Confidence 94%',
+      '📊 Illustrative Confidence'
+    );
+
+    addLabelAfterText(
+      'prediction confidence: 92%',
+      '📊 Illustrative Confidence'
+    );
+  }
+
+  /* ---------- Health Guardian disclaimer ---------- */
+  function healthDisclaimer(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('health guardian')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(!section || section.querySelector('.academic-integrity-warning'))
+      return;
+
+    const box=document.createElement('div');
+    box.className='academic-integrity-warning';
+
+    box.innerHTML=`
+      <strong>🧪 SYNTHETIC HEALTH PROFILE — DEMONSTRATION ONLY</strong><br>
+      All physiological and biomarker values shown in this module are
+      synthetic demonstration values. They do not represent a real athlete,
+      medical record, diagnosis, emergency assessment, or clinical decision.
+      <br><br>
+      <strong>ملف صحي اصطناعي — للعرض التجريبي فقط:</strong>
+      القيم الفسيولوجية والمؤشرات الحيوية المعروضة لا تمثل رياضيًا حقيقيًا
+      ولا تمثل تقييمًا أو تشخيصًا طبيًا.
+    `;
+
+    heading.insertAdjacentElement('afterend',box);
+  }
+
+  /* ---------- Injury Prevention disclaimer ---------- */
+  function injuryDisclaimer(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('injury prevention')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(!section || section.querySelector('.academic-integrity-warning'))
+      return;
+
+    const box=document.createElement('div');
+    box.className='academic-integrity-warning';
+
+    box.innerHTML=`
+      <strong>📊 MODELED RISK INDICATORS — NOT CLINICALLY VALIDATED</strong><br>
+      Injury-risk values are illustrative/modelled outputs for demonstration
+      and must not be interpreted as validated clinical injury probabilities.
+      <br><br>
+      <strong>مؤشرات خطر مُحاكاة — غير متحقق منها سريريًا.</strong>
+    `;
+
+    heading.insertAdjacentElement('afterend',box);
+  }
+
+  /* ---------- Nutrition disclaimer ---------- */
+  function nutritionDisclaimer(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('ai nutrition')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(!section || section.querySelector('.academic-integrity-warning'))
+      return;
+
+    const box=document.createElement('div');
+    box.className='academic-integrity-warning';
+
+    box.innerHTML=`
+      <strong>📊 ILLUSTRATIVE SPORTS NUTRITION SCENARIO</strong><br>
+      Nutrition values are synthetic demonstration values and are not a
+      personalized prescription. Individual nutrition plans require
+      assessment by a qualified sports nutrition professional.
+      <br><br>
+      <strong>سيناريو توضيحي للتغذية الرياضية:</strong>
+      القيم الغذائية اصطناعية ولأغراض العرض فقط وليست وصفة غذائية شخصية.
+    `;
+
+    heading.insertAdjacentElement('afterend',box);
+  }
+
+  /* ---------- National Dashboard disclaimer ---------- */
+  function nationalDisclaimer(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('national team dashboards')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(!section || section.querySelector('.academic-integrity-warning'))
+      return;
+
+    const box=document.createElement('div');
+    box.className='academic-integrity-warning';
+
+    box.innerHTML=`
+      <strong>🧪 ILLUSTRATIVE NATIONAL SPORTS DASHBOARD</strong><br>
+      Figures shown in this module are synthetic demonstration values and
+      do not represent official national statistics.
+      <br><br>
+      <strong>لوحة مؤشرات وطنية توضيحية:</strong>
+      الأرقام المعروضة بيانات اصطناعية ولا تمثل إحصاءات وطنية رسمية.
+    `;
+
+    heading.insertAdjacentElement('afterend',box);
+  }
+
+  /* ---------- Research / Evidence distinction ---------- */
+  function evidenceNotes(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const researchHeading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('research center')
+    );
+
+    if(researchHeading){
+
+      const section=
+        researchHeading.closest('.module-section') ||
+        researchHeading.parentElement;
+
+      if(section && !section.querySelector('.academic-evidence-note')){
+
+        const box=document.createElement('div');
+        box.className='academic-evidence-note';
+
+        box.innerHTML=`
+          <strong>🔬 Evidence Policy</strong><br>
+          Synthetic datasets and demonstration model outputs are separated
+          from verified scientific literature. Scientific claims should be
+          linked only to independently verifiable references.
+          <br><br>
+          <strong>سياسة الأدلة:</strong>
+          يتم الفصل بين البيانات الاصطناعية ومخرجات النماذج التجريبية وبين
+          الأدبيات العلمية الموثقة، ولا يُنسب أي ادعاء علمي إلى مرجع إلا
+          بعد التحقق منه.
+        `;
+
+        researchHeading.insertAdjacentElement('afterend',box);
+      }
+    }
+
+    const scientificHeading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('scientific evidence')
+    );
+
+    if(scientificHeading){
+
+      const section=
+        scientificHeading.closest('.module-section') ||
+        scientificHeading.parentElement;
+
+      if(section && !section.querySelector('.academic-evidence-note')){
+
+        const box=document.createElement('div');
+        box.className='academic-evidence-note';
+
+        box.innerHTML=`
+          <strong>🔬 VERIFIED SCIENTIFIC EVIDENCE</strong><br>
+          Only references whose bibliographic identity and relevance have
+          been independently verified should be presented as scientific
+          evidence.
+          <br><br>
+          <strong>أدلة علمية موثقة:</strong>
+          تُعرض فقط المراجع التي تم التحقق من هويتها الببليوغرافية
+          وارتباطها بالادعاء العلمي.
+        `;
+
+        scientificHeading.insertAdjacentElement('afterend',box);
+      }
+    }
+  }
+
+  /* ---------- Future architecture labels ---------- */
+  function futureLabels(){
+
+    addLabelAfterText(
+      '342 digital twins',
+      '🔮 Illustrative Future Scale'
+    );
+
+    addLabelAfterText(
+      '28 teams',
+      '🔮 Illustrative Future Scale'
+    );
+
+    addLabelAfterText(
+      '12 training centers',
+      '🔮 Illustrative Future Scale'
+    );
+
+    addLabelAfterText(
+      '8 national',
+      '🔮 Illustrative Future Scale'
+    );
+
+    addLabelAfterText(
+      'Egypt 2030 vision',
+      '🔮 Concept / Future Vision'
+    );
+  }
+
+  /* ---------- Digital Passport example ---------- */
+  function passportExample(){
+
+    replaceVisibleText(
+      'e.g. Mohamed Salah',
+      'e.g. Example Athlete'
+    );
+
+    replaceVisibleText(
+      'Mohamed Salah',
+      'Example Athlete'
+    );
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('digital passport')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(section && !section.querySelector('.academic-integrity-warning')){
+
+      const box=document.createElement('div');
+      box.className='academic-integrity-warning';
+
+      box.innerHTML=`
+        <strong>🧪 SYNTHETIC ATHLETE DIGITAL IDENTITY</strong><br>
+        Athlete profiles in this demonstration are synthetic and are not
+        associated with real athletes.
+        <br><br>
+        <strong>هوية رقمية اصطناعية:</strong>
+        ملفات الرياضيين في هذا العرض تجريبية ولا ترتبط برياضيين حقيقيين.
+      `;
+
+      heading.insertAdjacentElement('afterend',box);
+    }
+  }
+
+  /* ---------- XAI distinction ---------- */
+  function xaiDisclaimer(){
+
+    const headings=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+
+    const heading=headings.find(h =>
+      h.textContent.trim().toLowerCase().includes('explainable ai')
+    );
+
+    if(!heading) return;
+
+    const section=
+      heading.closest('.module-section') ||
+      heading.parentElement;
+
+    if(!section || section.querySelector('.academic-integrity-warning'))
+      return;
+
+    const box=document.createElement('div');
+    box.className='academic-integrity-warning';
+
+    box.innerHTML=`
+      <strong>🧠 XAI DEMONSTRATION FRAMEWORK</strong><br>
+      Model explanation, illustrative confidence indicators and scientific
+      evidence are distinct concepts. Confidence values shown here are
+      demonstration indicators unless supported by a validated model.
+      <br><br>
+      <strong>إطار توضيحي للذكاء الاصطناعي القابل للتفسير:</strong>
+      تفسير النموذج، ومؤشرات الثقة التوضيحية، والأدلة العلمية مفاهيم منفصلة.
+    `;
+
+    heading.insertAdjacentElement('afterend',box);
+  }
+
+  /* ---------- Run ---------- */
+  function runAcademicLayer(){
+
+    createIntegrityPanel();
+    academicRenaming();
+    addIntegrityLabels();
+    healthDisclaimer();
+    injuryDisclaimer();
+    nutritionDisclaimer();
+    nationalDisclaimer();
+    evidenceNotes();
+    futureLabels();
+    passportExample();
+    xaiDisclaimer();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',runAcademicLayer);
+  }else{
+    runAcademicLayer();
+  }
+
+})();
+</script>
 </body>
+    
