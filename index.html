@@ -3017,5 +3017,74 @@ analyze();
 
 })();
 </script>
+<!-- =========================================================
+     CONFERENCE UI FIX
+     Synchronize athlete selector + improve academic layer contrast
+     ========================================================= -->
+<style>
+  /* Improve readability of the Academic Integrity Framework */
+  .academic-integrity-layer{
+    color:#0f172a !important;
+  }
+
+  .academic-integrity-layer .ai-title{
+    color:#0f172a !important;
+  }
+
+  .academic-integrity-layer .ai-sub{
+    color:#334155 !important;
+    opacity:1 !important;
+  }
+
+  .academic-integrity-layer .ai-banner{
+    color:#0f172a !important;
+  }
+
+  .academic-integrity-layer .ai-tag{
+    color:#334155 !important;
+  }
+
+  .academic-integrity-layer .ai-tag strong{
+    color:#0f172a !important;
+  }
+
+  .academic-integrity-layer .ai-note{
+    color:#334155 !important;
+    opacity:1 !important;
+  }
+</style>
+
+<script>
+(function(){
+  "use strict";
+
+  function synchronizeConferenceAthlete(){
+
+    const selector = document.getElementById("ctAthlete");
+
+    if(!selector) return;
+
+    /*
+      The conference scenario starts with Lucas Ferreira.
+      Synchronize the visible selector with the internal demo state.
+    */
+    selector.value = "Lucas Ferreira";
+
+    selector.dispatchEvent(
+      new Event("change", { bubbles:true })
+    );
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      synchronizeConferenceAthlete
+    );
+  }else{
+    synchronizeConferenceAthlete();
+  }
+
+})();
+</script>
 </body>
     
