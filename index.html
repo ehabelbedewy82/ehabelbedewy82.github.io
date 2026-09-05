@@ -3828,5 +3828,413 @@ analyze();
 
 })();
 </script>
+<!-- RESEARCH CENTER & EVIDENCE - ACADEMIC INTEGRITY FIX -->
+<style>
+  /* =========================================
+     Research Center - scoped only
+     ========================================= */
+
+  #section-research .academic-integrity-warning {
+    color: #111827 !important;
+    background: #ecfdf5 !important;
+    border-left: 4px solid #22c55e !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #111827 !important;
+  }
+
+  #section-research .academic-integrity-warning * {
+    color: #334155 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    text-shadow: none !important;
+    -webkit-text-fill-color: #334155 !important;
+  }
+
+  #section-research .academic-integrity-warning strong {
+    color: #111827 !important;
+    font-weight: 800 !important;
+    -webkit-text-fill-color: #111827 !important;
+  }
+
+  #section-research .research-evidence-note {
+    margin: 0 0 1rem 0;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: #ecfdf5;
+    border-left: 4px solid #22c55e;
+    color: #1f2937 !important;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  #section-research .research-evidence-note strong {
+    color: #111827 !important;
+    font-weight: 800 !important;
+  }
+
+  #section-research .verified-evidence-item {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  #section-research .verified-evidence-item:last-child {
+    border-bottom: none;
+  }
+
+  #section-research .verified-evidence-title {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  #section-research .verified-evidence-meta {
+    color: var(--text-secondary) !important;
+    font-size: 0.78rem;
+    margin-top: 0.15rem;
+    line-height: 1.4;
+  }
+
+  #section-research .verified-evidence-tag {
+    display: inline-block;
+    margin-top: 0.3rem;
+    padding: 0.12rem 0.55rem;
+    border-radius: 20px;
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green) !important;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+</style>
+
+<script>
+(function () {
+  function fixResearchCenter() {
+
+    const section = document.getElementById('section-research');
+
+    if (!section) return;
+
+    /* =========================================
+       1. Make Evidence Policy readable
+       ========================================= */
+
+    const warning =
+      section.querySelector('.academic-integrity-warning');
+
+    if (warning) {
+
+      warning.style.setProperty(
+        'color',
+        '#111827',
+        'important'
+      );
+
+      warning.style.setProperty(
+        'opacity',
+        '1',
+        'important'
+      );
+
+      warning.style.setProperty(
+        'visibility',
+        'visible',
+        'important'
+      );
+
+      warning.style.setProperty(
+        'filter',
+        'none',
+        'important'
+      );
+
+      warning.style.setProperty(
+        'text-shadow',
+        'none',
+        'important'
+      );
+
+      warning.style.setProperty(
+        '-webkit-text-fill-color',
+        '#111827',
+        'important'
+      );
+
+      warning.querySelectorAll('*').forEach(function (el) {
+
+        el.style.setProperty(
+          'color',
+          '#334155',
+          'important'
+        );
+
+        el.style.setProperty(
+          'opacity',
+          '1',
+          'important'
+        );
+
+        el.style.setProperty(
+          'visibility',
+          'visible',
+          'important'
+        );
+
+        el.style.setProperty(
+          'filter',
+          'none',
+          'important'
+        );
+
+        el.style.setProperty(
+          'text-shadow',
+          'none',
+          'important'
+        );
+
+        el.style.setProperty(
+          '-webkit-text-fill-color',
+          '#334155',
+          'important'
+        );
+      });
+
+      warning.querySelectorAll('strong').forEach(function (el) {
+
+        el.style.setProperty(
+          'color',
+          '#111827',
+          'important'
+        );
+
+        el.style.setProperty(
+          'font-weight',
+          '800',
+          'important'
+        );
+      });
+    }
+
+    /* =========================================
+       2. Clarify the dataset
+       ========================================= */
+
+    const athleteLabel =
+      section.querySelector('[data-i18n="research.athletes"]');
+
+    if (athleteLabel) {
+      athleteLabel.textContent = 'Synthetic athletes';
+    }
+
+    const variableLabel =
+      section.querySelector('[data-i18n="research.variables"]');
+
+    if (variableLabel) {
+      variableLabel.textContent = 'Demonstration variables';
+    }
+
+    const modelLabel =
+      section.querySelector('[data-i18n="research.mlModels"]');
+
+    if (modelLabel) {
+      modelLabel.textContent = 'Illustrative ML models';
+    }
+
+    /* =========================================
+       3. Add synthetic dataset notice
+       ========================================= */
+
+    const datasetCard =
+      section.querySelector('.grid-2 .card:first-child');
+
+    if (
+      datasetCard &&
+      !datasetCard.querySelector('.research-evidence-note')
+    ) {
+
+      const note = document.createElement('div');
+
+      note.className = 'research-evidence-note';
+
+      note.innerHTML =
+        '<strong>🧪 SYNTHETIC RESEARCH DATASET — CONFERENCE DEMONSTRATION ONLY</strong><br>' +
+        'Dataset figures are illustrative synthetic values created for demonstration and do not represent a real athlete research database.' +
+        '<br><br>' +
+        '<strong>بيانات بحثية اصطناعية — للعرض التجريبي فقط</strong><br>' +
+        'أرقام مجموعة البيانات قيم اصطناعية توضيحية أُنشئت للعرض التجريبي ولا تمثل قاعدة بيانات بحثية حقيقية للرياضيين.';
+
+      const cardHeader =
+        datasetCard.querySelector('.card-header');
+
+      if (cardHeader) {
+        cardHeader.insertAdjacentElement(
+          'afterend',
+          note
+        );
+      }
+    }
+
+    /* =========================================
+       4. Replace the unverified report
+          with verified scientific evidence
+       ========================================= */
+
+    const reportCard =
+      section.querySelector('.grid-2 .card:nth-child(2)');
+
+    if (reportCard) {
+
+      const reportBody =
+        reportCard.querySelector('.card-body');
+
+      if (
+        reportBody &&
+        !reportBody.querySelector('.verified-evidence-item')
+      ) {
+
+        reportBody.innerHTML =
+
+          '<div class="verified-evidence-item">' +
+
+            '<div class="verified-evidence-title">' +
+              'Neuromuscular training for sports injury prevention: a systematic review' +
+            '</div>' +
+
+            '<div class="verified-evidence-meta">' +
+              'Hübscher M, Zech A, Pfeifer K, et al. • Med Sci Sports Exerc. 2010 • PMID 19952811' +
+            '</div>' +
+
+            '<span class="verified-evidence-tag">' +
+              'VERIFIED EVIDENCE' +
+            '</span>' +
+
+          '</div>' +
+
+          '<div class="verified-evidence-item">' +
+
+            '<div class="verified-evidence-title">' +
+              'Talent Identification in Sport: A Systematic Review' +
+            '</div>' +
+
+            '<div class="verified-evidence-meta">' +
+              'Johnston K, Wattie N, Schorer J, Baker J. • Sports Med. 2018 • PMID 29082463' +
+            '</div>' +
+
+            '<span class="verified-evidence-tag">' +
+              'VERIFIED EVIDENCE' +
+            '</span>' +
+
+          '</div>' +
+
+          '<div class="verified-evidence-item">' +
+
+            '<div class="verified-evidence-title">' +
+              'Quantifying Exercise Heat Acclimatisation in Athletes and Military Personnel: A Systematic Review and Meta-analysis' +
+            '</div>' +
+
+            '<div class="verified-evidence-meta">' +
+              'Brown HA, Topham TH, Clark B, et al. • Sports Med. 2024 • PMID 38051495' +
+            '</div>' +
+
+            '<span class="verified-evidence-tag">' +
+              'VERIFIED EVIDENCE' +
+            '</span>' +
+
+          '</div>' +
+
+          '<div class="verified-evidence-item">' +
+
+            '<div class="verified-evidence-title">' +
+              'Recovery and Performance in Sport: Consensus Statement' +
+            '</div>' +
+
+            '<div class="verified-evidence-meta">' +
+              'Kellmann M, Bertollo M, Bosquet L, et al. • Int J Sports Physiol Perform. 2018 • PMID 29345524' +
+            '</div>' +
+
+            '<span class="verified-evidence-tag">' +
+              'VERIFIED EVIDENCE' +
+            '</span>' +
+
+          '</div>';
+
+        const reportTitle =
+          reportCard.querySelector(
+            '[data-i18n="research.reports"]'
+          );
+
+        if (reportTitle) {
+          reportTitle.textContent =
+            'Verified Scientific Evidence';
+        }
+      }
+    }
+
+    /* =========================================
+       5. Add one clear evidence-policy note
+       ========================================= */
+
+    if (
+      !section.querySelector('.research-evidence-note-policy')
+    ) {
+
+      const heading =
+        section.querySelector('.section-header');
+
+      if (heading) {
+
+        const box =
+          document.createElement('div');
+
+        box.className =
+          'research-evidence-note research-evidence-note-policy';
+
+        box.innerHTML =
+          '<strong>🔬 VERIFIED EVIDENCE / دليل علمي موثق</strong><br>' +
+          'Scientific references shown in this module are independently verifiable literature. Synthetic datasets and illustrative model outputs are kept separate from the evidence library.' +
+          '<br><br>' +
+          'المراجع العلمية المعروضة في هذه الوحدة مصادر أدبية يمكن التحقق منها بصورة مستقلة، مع الفصل بين البيانات الاصطناعية والمخرجات التوضيحية وبين الأدلة العلمية الموثقة.';
+
+        heading.insertAdjacentElement(
+          'afterend',
+          box
+        );
+      }
+    }
+  }
+
+  function runResearchFix() {
+
+    fixResearchCenter();
+
+    setTimeout(
+      fixResearchCenter,
+      300
+    );
+
+    setTimeout(
+      fixResearchCenter,
+      1000
+    );
+  }
+
+  if (document.readyState === 'loading') {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      runResearchFix
+    );
+
+  } else {
+
+    runResearchFix();
+
+  }
+
+})();
+</script>
 </body>
      
