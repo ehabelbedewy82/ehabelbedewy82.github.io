@@ -3273,5 +3273,67 @@ analyze();
     font-weight: 800 !important;
   }
 </style>
+<!-- TACTICAL INTELLIGENCE - FINAL MICRO FIX -->
+<style>
+  /* Heatmap visualization: scoped only to Tactical Intelligence */
+  #section-tactical .heatmap-mock {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    height: 125px;
+    padding: 6px;
+    margin-bottom: 0.7rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  #section-tactical .heatmap-mock .cell {
+    min-height: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  #section-tactical .heatmap-mock .cell.low {
+    background: rgba(34, 211, 238, 0.16);
+  }
+
+  #section-tactical .heatmap-mock .cell.med {
+    background: rgba(34, 211, 238, 0.32);
+  }
+
+  #section-tactical .heatmap-mock .cell.high {
+    background: rgba(59, 130, 246, 0.55);
+  }
+
+  #section-tactical .heatmap-mock .cell.peak {
+    background: rgba(247, 201, 72, 0.78);
+  }
+</style>
+
+<script>
+(function () {
+  function tacticalMicroFix() {
+    const section = document.getElementById('section-tactical');
+    if (!section) return;
+
+    /* Fix only the remaining strategy label */
+    section.querySelectorAll('.tag, span').forEach(function (el) {
+      const text = el.textContent.trim().toLowerCase();
+
+      if (text.startsWith('winning strategy:')) {
+        el.textContent = 'Illustrative tactical pattern: counter-attack';
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tacticalMicroFix);
+  } else {
+    tacticalMicroFix();
+  }
+})();
+</script>
 </body>
      
