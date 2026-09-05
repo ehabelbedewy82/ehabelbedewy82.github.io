@@ -3172,5 +3172,79 @@ analyze();
     -webkit-text-fill-color: #111827 !important;
   }
 </style>
+<!-- TACTICAL INTELLIGENCE - ACADEMIC DEMONSTRATION FIX -->
+<style>
+  /* Tactical Intelligence academic notice */
+  #section-tactical .tactical-demo-warning {
+    margin: 0 0 1.4rem 0;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: #f8fafc;
+    border-left: 4px solid #f59e0b;
+    color: #1f2937 !important;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  #section-tactical .tactical-demo-warning strong {
+    color: #111827 !important;
+    font-weight: 800;
+  }
+</style>
+
+<script>
+(function () {
+  function fixTacticalAcademicLabels() {
+    const section = document.getElementById('section-tactical');
+    if (!section) return;
+
+    /* Replace potentially misleading outcome wording only inside Tactical Intelligence */
+    section.querySelectorAll('.label, .tag, span').forEach(function (el) {
+      const text = el.textContent.trim();
+
+      if (text === 'Win probability') {
+        el.textContent = 'Simulated Outcome Probability';
+      }
+
+      if (text === 'winning strategy: counter-attack') {
+        el.textContent = 'Illustrative tactical pattern: counter-attack';
+      }
+
+      if (text === 'AI tactical plan ready') {
+        el.textContent = 'AI tactical scenario suggestion';
+      }
+
+      if (text === 'tactical rating: A-') {
+        el.textContent = 'Illustrative tactical rating: A-';
+      }
+    });
+
+    /* Add one concise academic demonstration notice */
+    if (!section.querySelector('.tactical-demo-warning')) {
+      const heading = section.querySelector('.section-header');
+
+      if (heading) {
+        const box = document.createElement('div');
+        box.className = 'tactical-demo-warning';
+
+        box.innerHTML =
+          '<strong>🧪 SIMULATED TACTICAL OUTPUT — CONFERENCE DEMONSTRATION ONLY</strong><br>' +
+          'Tactical patterns, recommendations and outcome indicators are illustrative simulation outputs, not validated match predictions.' +
+          '<br><br>' +
+          '<strong>مخرجات تكتيكية مُحاكاة — للعرض التجريبي فقط</strong><br>' +
+          'الأنماط والتوصيات والمؤشرات التكتيكية مخرجات توضيحية للمحاكاة وليست تنبؤات مؤكدة بنتائج المباريات.';
+
+        heading.insertAdjacentElement('afterend', box);
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixTacticalAcademicLabels);
+  } else {
+    fixTacticalAcademicLabels();
+  }
+})();
+</script>
 </body>
      
