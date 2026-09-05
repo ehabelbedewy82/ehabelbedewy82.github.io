@@ -3401,5 +3401,118 @@ analyze();
   }
 })();
 </script>
+<!-- TALENT ID - ACADEMIC INTEGRITY PATCH -->
+<style>
+  /* Scoped only to Talent ID */
+  #section-talent .talent-demo-warning {
+    margin: 0 0 1.4rem 0;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: #f8fafc;
+    border-left: 4px solid #f59e0b;
+    color: #1f2937 !important;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  #section-talent .talent-demo-warning strong {
+    color: #111827 !important;
+    font-weight: 800;
+  }
+</style>
+
+<script>
+(function () {
+  function fixTalentAcademicLabels() {
+    const section = document.getElementById('section-talent');
+    if (!section) return;
+
+    /* 1. Rename the score card heading */
+    const prospects = section.querySelector('[data-i18n="talent.prospects"]');
+    if (prospects) {
+      prospects.textContent = 'Illustrative Talent Scores';
+    }
+
+    /* 2. Clarify Olympic potential */
+    const olympicPotential = section.querySelector(
+      '[data-i18n="talent.olympicPotential"]'
+    );
+    if (olympicPotential) {
+      olympicPotential.textContent =
+        'Illustrative potential indicator: high';
+    }
+
+    /* 3. Clarify elite similarity */
+    const eliteSimilarity = section.querySelector(
+      '[data-i18n="talent.eliteSimilarity"]'
+    );
+    if (eliteSimilarity) {
+      eliteSimilarity.textContent =
+        'Illustrative elite-similarity indicator: 89%';
+    }
+
+    /* 4. Clarify ranking labels */
+    const nationalRank = section.querySelector(
+      '[data-i18n="talent.nationalRank"]'
+    );
+    if (nationalRank) {
+      nationalRank.textContent = 'Synthetic benchmark rank';
+    }
+
+    const worldRank = section.querySelector(
+      '[data-i18n="talent.worldRank"]'
+    );
+    if (worldRank) {
+      worldRank.textContent = 'Synthetic benchmark rank';
+    }
+
+    /* 5. Clarify Olympic potential score */
+    const potentialScore = section.querySelector(
+      '[data-i18n="talent.olympicPotentialScore"]'
+    );
+    if (potentialScore) {
+      potentialScore.textContent =
+        'Illustrative potential indicator';
+    }
+
+    /* 6. Clarify recommended sport */
+    const recommendedSport = section.querySelector(
+      '[data-i18n="talent.recommendedSport"]'
+    );
+    if (recommendedSport) {
+      recommendedSport.textContent =
+        'Illustrative sport-fit suggestion: football';
+    }
+
+    /* 7. Add one clear academic disclaimer */
+    if (!section.querySelector('.talent-demo-warning')) {
+      const heading = section.querySelector('.section-header');
+
+      if (heading) {
+        const box = document.createElement('div');
+        box.className = 'talent-demo-warning';
+
+        box.innerHTML =
+          '<strong>🧪 ILLUSTRATIVE TALENT OUTPUT — CONFERENCE DEMONSTRATION ONLY</strong><br>' +
+          'Talent scores, rankings and potential indicators are illustrative outputs based on synthetic demonstration data and are not validated talent-selection or Olympic qualification predictions.' +
+          '<br><br>' +
+          '<strong>مخرجات توضيحية للتعرّف على المواهب — للعرض التجريبي فقط</strong><br>' +
+          'درجات الموهبة والترتيبات ومؤشرات الإمكانات مخرجات توضيحية مبنية على بيانات اصطناعية للعرض التجريبي، وليست تنبؤات معتمدة لاختيار المواهب أو التأهل الأولمبي.';
+
+        heading.insertAdjacentElement('afterend', box);
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      fixTalentAcademicLabels
+    );
+  } else {
+    fixTalentAcademicLabels();
+  }
+})();
+</script>
 </body>
      
