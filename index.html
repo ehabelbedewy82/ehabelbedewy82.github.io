@@ -4262,5 +4262,279 @@ analyze();
 
 })();
 </script>
+<!-- AI CHAT - ACADEMIC INTEGRITY FIX v2 -->
+<style>
+#section-chat .ai-chat-demo-warning {
+    margin: 0 0 1.4rem 0;
+    padding: 12px 14px;
+    border-radius: 9px;
+    background: #fff8e8;
+    border-left: 4px solid #f59e0b;
+    color: #1f2937 !important;
+    font-size: 11px;
+    line-height: 1.55;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#section-chat .ai-chat-demo-warning strong {
+    color: #111827 !important;
+    font-weight: 700;
+}
+
+#section-chat .ai-chat-evidence-note {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #4b5563 !important;
+    line-height: 1.5;
+}
+
+#section-chat .ai-chat-educational-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 3px 7px;
+    border-radius: 5px;
+    background: #f3f4f6;
+    color: #374151 !important;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+</style>
+
+<script>
+(function () {
+
+    function fixAIChatAcademicIntegrityV2() {
+
+        const section = document.querySelector('#section-chat');
+        if (!section) return;
+
+        /* 1. Academic integrity warning */
+        let warning = section.querySelector('.ai-chat-demo-warning');
+
+        if (!warning) {
+
+            const header = section.querySelector('.section-header');
+
+            warning = document.createElement('div');
+            warning.className = 'ai-chat-demo-warning';
+
+            warning.innerHTML = `
+                <strong>
+                    🧠 AI-GENERATED EDUCATIONAL RESPONSE — CONFERENCE DEMONSTRATION ONLY
+                </strong>
+                <br>
+                The responses shown here are illustrative educational outputs
+                generated for demonstration purposes. They are not personalized
+                medical, nutritional, or training prescriptions.
+                <br><br>
+                <strong>
+                    استجابة تعليمية مولدة بالذكاء الاصطناعي — للعرض التجريبي فقط
+                </strong>
+                <br>
+                المخرجات المعروضة هنا استجابات تعليمية توضيحية لأغراض العرض التجريبي،
+                وليست وصفات شخصية طبية أو غذائية أو تدريبية.
+            `;
+
+            if (header) {
+                header.insertAdjacentElement('afterend', warning);
+            } else {
+                section.insertBefore(warning, section.firstChild);
+            }
+        }
+
+        /* 2. Recovery educational response */
+        const recoveryMsg =
+            section.querySelector('[data-i18n="chat.msg2"]');
+
+        if (recoveryMsg) {
+
+            recoveryMsg.innerHTML = `
+                <span class="ai-chat-educational-label">
+                    AI-generated Educational Response — Illustrative
+                </span>
+                <br>
+                Recovery after intense training generally involves adequate sleep,
+                appropriate nutrition and hydration, load management, and individualized
+                recovery strategies. The most suitable approach depends on training
+                demands, athlete characteristics, and context.
+                <div class="ai-chat-evidence-note">
+                    Verified evidence example: Kellmann et al. (2018),
+                    <em>Recovery and Performance in Sport: Consensus Statement</em>,
+                    PMID 29345524.
+                </div>
+            `;
+
+            recoveryMsg.style.color = '#1f2937';
+            recoveryMsg.style.opacity = '1';
+        }
+
+        /* 3. Heat adaptation educational response */
+        const heatMsg =
+            section.querySelector('[data-i18n="chat.msg4"]');
+
+        if (heatMsg) {
+
+            heatMsg.innerHTML = `
+                <span class="ai-chat-educational-label">
+                    AI-generated Educational Response — Illustrative
+                </span>
+                <br>
+                Heat adaptation generally involves progressive, repeated exposure
+                to heat combined with appropriate hydration and monitoring.
+                The duration and intensity of an acclimation program should be
+                individualized according to the athlete, environment, and training context.
+                <div class="ai-chat-evidence-note">
+                    Verified evidence example: Brown et al. (2024),
+                    <em>Quantifying Exercise Heat Acclimatisation in Athletes and Military Personnel</em>,
+                    PMID 38051495.
+                </div>
+            `;
+
+            heatMsg.style.color = '#1f2937';
+            heatMsg.style.opacity = '1';
+        }
+    }
+
+    /* Initial execution */
+    if (document.readyState === 'loading') {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            fixAIChatAcademicIntegrityV2
+        );
+
+    } else {
+
+        fixAIChatAcademicIntegrityV2();
+    }
+
+    /* Delayed rendering protection */
+    setTimeout(fixAIChatAcademicIntegrityV2, 300);
+    setTimeout(fixAIChatAcademicIntegrityV2, 1000);
+
+    /*
+       Language-switch protection.
+       Re-apply the academic layer if the interface changes language.
+    */
+    document.addEventListener('click', function () {
+        setTimeout(fixAIChatAcademicIntegrityV2, 150);
+        setTimeout(fixAIChatAcademicIntegrityV2, 500);
+    });
+
+})();
+</script>
+(function () {
+
+    function fixAIChatAcademicIntegrity() {
+
+        const section = document.querySelector('#section-chat');
+        if (!section) return;
+
+        /* --------------------------------------------------
+           1. Add visible academic-integrity warning
+        -------------------------------------------------- */
+        let warning = section.querySelector('.ai-chat-demo-warning');
+
+        if (!warning) {
+
+            const header = section.querySelector('.section-header');
+
+            warning = document.createElement('div');
+            warning.className = 'ai-chat-demo-warning';
+
+            warning.innerHTML = `
+                <strong>
+                    🧠 AI-GENERATED EDUCATIONAL RESPONSE — CONFERENCE DEMONSTRATION ONLY
+                </strong>
+                <br>
+                The responses shown in this module are illustrative educational outputs
+                generated for demonstration purposes. They are not personalized medical,
+                nutritional, or training prescriptions.
+                <br><br>
+                <strong>
+                    استجابة تعليمية مولدة بالذكاء الاصطناعي — للعرض التجريبي فقط
+                </strong>
+                <br>
+                المخرجات المعروضة هنا استجابات تعليمية توضيحية لأغراض العرض التجريبي،
+                وليست وصفات شخصية طبية أو غذائية أو تدريبية.
+            `;
+
+            if (header) {
+                header.insertAdjacentElement('afterend', warning);
+            } else {
+                section.insertBefore(warning, section.firstChild);
+            }
+        }
+
+        /* --------------------------------------------------
+           2. Replace recovery response
+        -------------------------------------------------- */
+        const recoveryMsg = section.querySelector('[data-i18n="chat.msg2"]');
+
+        if (recoveryMsg) {
+
+            recoveryMsg.innerHTML = `
+                <span class="ai-chat-educational-label">
+                    AI-generated Educational Response — Illustrative
+                </span>
+                <br>
+                Recovery after intense training generally involves adequate sleep,
+                appropriate nutrition and hydration, load management, and individualized
+                recovery strategies. The most suitable approach depends on training
+                demands, athlete characteristics, and context.
+                <div class="ai-chat-evidence-note">
+                    Verified evidence example: Kellmann et al. (2018),
+                    <em>Recovery and Performance in Sport: Consensus Statement</em>,
+                    PMID 29345524.
+                </div>
+            `;
+
+            recoveryMsg.style.color = '#1f2937';
+            recoveryMsg.style.opacity = '1';
+        }
+
+        /* --------------------------------------------------
+           3. Replace heat-adaptation response
+        -------------------------------------------------- */
+        const heatMsg = section.querySelector('[data-i18n="chat.msg4"]');
+
+        if (heatMsg) {
+
+            heatMsg.innerHTML = `
+                <span class="ai-chat-educational-label">
+                    AI-generated Educational Response — Illustrative
+                </span>
+                <br>
+                Heat adaptation generally involves progressive, repeated exposure
+                to heat combined with appropriate hydration and monitoring.
+                The duration and intensity of an acclimation program should be
+                individualized according to the athlete, environment, and training context.
+                <div class="ai-chat-evidence-note">
+                    Verified evidence example: Brown et al. (2024),
+                    <em>Quantifying Exercise Heat Acclimatisation in Athletes and Military Personnel</em>,
+                    PMID 38051495.
+                </div>
+            `;
+
+            heatMsg.style.color = '#1f2937';
+            heatMsg.style.opacity = '1';
+        }
+    }
+
+    /* Initial execution */
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fixAIChatAcademicIntegrity);
+    } else {
+        fixAIChatAcademicIntegrity();
+    }
+
+    /* Protection against delayed rendering */
+    setTimeout(fixAIChatAcademicIntegrity, 300);
+    setTimeout(fixAIChatAcademicIntegrity, 1000);
+
+})();
+</script>
 </body>
      
