@@ -3630,5 +3630,122 @@ analyze();
   }
 })();
 </script>
+<!-- NATIONAL DASHBOARDS - ACADEMIC INTEGRITY PATCH -->
+<style>
+  /* Scoped exclusively to National Dashboards */
+  #section-national .national-demo-warning {
+    margin: 0 0 1.4rem 0;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: #f8fafc !important;
+    border-left: 4px solid #f59e0b;
+    color: #1f2937 !important;
+    font-size: 11px;
+    line-height: 1.5;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    text-shadow: none !important;
+  }
+
+  #section-national .national-demo-warning strong {
+    color: #111827 !important;
+    font-weight: 800 !important;
+  }
+</style>
+
+<script>
+(function () {
+  function nationalDashboardAcademicFix() {
+    const section = document.getElementById('section-national');
+    if (!section) return;
+
+    /* Make the existing academic warning readable */
+    const existingWarning = section.querySelector(
+      '.academic-integrity-warning'
+    );
+
+    if (existingWarning) {
+      existingWarning.classList.add('national-demo-warning');
+
+      existingWarning.style.color = '#1f2937';
+      existingWarning.style.opacity = '1';
+      existingWarning.style.visibility = 'visible';
+      existingWarning.style.filter = 'none';
+      existingWarning.style.textShadow = 'none';
+
+      existingWarning.querySelectorAll('*').forEach(function (el) {
+        el.style.color = '#1f2937';
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+        el.style.filter = 'none';
+        el.style.textShadow = 'none';
+      });
+
+      existingWarning.querySelectorAll('strong').forEach(function (el) {
+        el.style.color = '#111827';
+        el.style.fontWeight = '800';
+      });
+    }
+
+    /* Clarify the synthetic / illustrative nature of displayed values */
+    section.querySelectorAll('*').forEach(function (el) {
+      if (el.children.length > 0) return;
+
+      const text = el.textContent.trim();
+
+      if (text === 'Athletes: 342 | Medals: 18') {
+        el.textContent =
+          'Synthetic athlete count: 342 | Illustrative medals indicator: 18';
+      }
+
+      if (text === 'National team: rank 12') {
+        el.textContent =
+          'Synthetic benchmark rank: 12';
+      }
+
+      if (text === 'Academies: 28') {
+        el.textContent =
+          'Illustrative academy count: 28';
+      }
+
+      if (text === 'Sports schools: 14') {
+        el.textContent =
+          'Illustrative sports-school count: 14';
+      }
+    });
+
+    /* Add a dedicated warning only if one does not already exist */
+    if (!existingWarning &&
+        !section.querySelector('.national-demo-warning')) {
+
+      const heading = section.querySelector('.section-header');
+
+      if (heading) {
+        const box = document.createElement('div');
+        box.className = 'national-demo-warning';
+
+        box.innerHTML =
+          '<strong>🧪 ILLUSTRATIVE NATIONAL SPORTS DASHBOARD — CONFERENCE DEMONSTRATION ONLY</strong><br>' +
+          'Figures shown in this module are synthetic demonstration values and do not represent official national statistics.' +
+          '<br><br>' +
+          '<strong>لوحة مؤشرات وطنية توضيحية — للعرض التجريبي فقط</strong><br>' +
+          'الأرقام المعروضة بيانات اصطناعية للعرض التجريبي ولا تمثل إحصاءات وطنية رسمية.';
+
+        heading.insertAdjacentElement('afterend', box);
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      nationalDashboardAcademicFix
+    );
+  } else {
+    nationalDashboardAcademicFix();
+  }
+})();
+</script>
 </body>
      
